@@ -89,7 +89,7 @@ public class DownloadService {
     @Produces(MediaType.APPLICATION_JSON)
     public ChildListDownloadResponse downloadChildList(ChildListDownloadRequest request) {
     	ChildListDownloadResponse response = new ChildListDownloadResponse();
-        response.setChildIdList(childLoginDetailsDao.getByParentId(request.getParentId()));
+        response.setChildDetailList(childLoginDetailsDao.getByParentId(request.getParentId()));
         response.setStatus("success");
         return response;
     }

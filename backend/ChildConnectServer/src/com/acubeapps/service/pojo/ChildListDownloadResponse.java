@@ -5,7 +5,7 @@ import java.util.List;
 import com.acubeapps.storage.dynamodb.pojo.ChildLoginDetails;
 
 public class ChildListDownloadResponse {
-    private List<ChildLoginDetails> childIdList;
+    private List<ChildLoginDetails> childDetailList;
     private String status;
     private List<Error> errorList;
 
@@ -25,11 +25,11 @@ public class ChildListDownloadResponse {
         this.errorList = errorList;
     }
 
-	public List<ChildLoginDetails> getChildIdList() {
-		return childIdList;
+	public List<ChildLoginDetails> getChildDetailList() {
+		return childDetailList;
 	}
 
-	public void setChildIdList(List<ChildLoginDetails> childIdList) {
-		this.childIdList = childIdList;
+	public void setChildDetailList(List<ChildLoginDetails> childDetailList) {
+		this.childDetailList = childDetailList;
 	}
 }
