@@ -1,53 +1,49 @@
 package com.acubeapps.childconnect.task;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.acubeapps.childconnect.R;
+import com.acubeapps.childconnect.model.QuestionDetails;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link McqFragment.OnFragmentInteractionListener} interface
+ * {@link OnMcqFragmentInteractionListener} interface
  * to handle interaction events.
  * Use the {@link McqFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class McqFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String QUESTION_DETAILS = "QUESTION_DETAILS";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private QuestionDetails questionDetails;
 
-    private OnFragmentInteractionListener mListener;
+    private OnMcqFragmentInteractionListener mListener;
+
+    @BindView(R.id.txt_question)
+    TextView txtQuestion;
+
+    @BindView(R.id.btn_done)
+    Button btnDone;
 
     public McqFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment McqFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static McqFragment newInstance(String param1, String param2) {
+    public static McqFragment newInstance(QuestionDetails questionDetails) {
         McqFragment fragment = new McqFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putParcelable(QUESTION_DETAILS, questionDetails);
         fragment.setArguments(args);
         return fragment;
     }
@@ -56,8 +52,7 @@ public class McqFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            questionDetails = getArguments().getParcelable(QUESTION_DETAILS);
         }
     }
 
@@ -65,24 +60,26 @@ public class McqFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_mcq, container, false);
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+        View fragmentView =  inflater.inflate(R.layout.fragment_mcq, container, false);
+        ButterKnife.bind(this, fragmentView);
+        txtQuestion.setText(questionDetails.questionText);
+        btnDone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mListener.onSuccessfulAttempt();
+            }
+        });
+        return fragmentView;
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (context instanceof OnMcqFragmentInteractionListener) {
+            mListener = (OnMcqFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+                    + " must implement OnMcqFragmentInteractionListener");
         }
     }
 
@@ -92,18 +89,8 @@ public class McqFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+    public interface OnMcqFragmentInteractionListener {
+        void onSuccessfulAttempt();
+        void onFailedAttempt();
     }
 }
