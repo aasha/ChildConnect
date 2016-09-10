@@ -11,10 +11,13 @@ import javax.ws.rs.core.MediaType;
 
 import com.acubeapps.service.pojo.ChildDataUsageDownloadRequest;
 import com.acubeapps.service.pojo.ChildDataUsageDownloadResponse;
+import com.acubeapps.service.pojo.ChildListDownloadRequest;
+import com.acubeapps.service.pojo.ChildListDownloadResponse;
 import com.acubeapps.service.pojo.ChildPolicyDownloadRequest;
 import com.acubeapps.service.pojo.ChildPolicyDownloadResponse;
 import com.acubeapps.service.pojo.Error;
 import com.acubeapps.storage.dynamodb.dao.ChildDataUsageDao;
+import com.acubeapps.storage.dynamodb.dao.ChildLoginDetailsDao;
 import com.acubeapps.storage.dynamodb.dao.ChildPolicyDao;
 import com.acubeapps.storage.dynamodb.pojo.ChildDataUsageDetails;
 import com.acubeapps.storage.dynamodb.pojo.ChildPolicyDetails;
@@ -22,12 +25,14 @@ import com.acubeapps.storage.dynamodb.pojo.ChildPolicyDetails;
 @Path("/download")
 public class DownloadService {
 
-    private ChildPolicyDao childPolicyDao;
-    private ChildDataUsageDao childDataUsageDao;
+    private final ChildPolicyDao childPolicyDao;
+    private final ChildDataUsageDao childDataUsageDao;
+    private final ChildLoginDetailsDao childLoginDetailsDao;
 
     public DownloadService() {
         childPolicyDao = new ChildPolicyDao();
         childDataUsageDao = new ChildDataUsageDao();
+        childLoginDetailsDao = new ChildLoginDetailsDao();
     }
 
     @POST
@@ -75,6 +80,17 @@ public class DownloadService {
             response.setAppUsage(details.getUsageDetails());
         }
 
+        return response;
+    }
+
+    @POST
+    @Path("/childList")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public ChildListDownloadResponse downloadChildList(ChildListDownloadRequest request) {
+    	ChildListDownloadResponse response = new ChildListDownloadResponse();
+        response.setChildIdList(childLoginDetailsDao.getByParentId(request.getParentId()));
+        response.setStatus("success");
         return response;
     }
 }

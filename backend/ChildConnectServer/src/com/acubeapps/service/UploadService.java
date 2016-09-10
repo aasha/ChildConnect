@@ -92,6 +92,8 @@ public class UploadService {
 //        appConfigList.add(appConfig);
 //        policy.setAppConfigList(appConfigList);
 //        details.setPolicy(policy);
+
+
         details.setPolicy(request.getPolicy());
         childPolicyDao.save(details);
 
