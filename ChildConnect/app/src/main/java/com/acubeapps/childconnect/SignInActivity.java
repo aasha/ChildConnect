@@ -12,9 +12,12 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.acubeapps.childconnect.events.ChildRegisteredEvent;
+import com.acubeapps.childconnect.events.ShowTaskScreenEvent;
 import com.acubeapps.childconnect.model.ChildRegisterResponse;
 import com.acubeapps.childconnect.network.NetworkInterface;
 import com.acubeapps.childconnect.network.NetworkResponse;
+import com.acubeapps.childconnect.task.ProblemActivity;
+import com.acubeapps.childconnect.task.WaitTimerActivity;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -67,7 +70,6 @@ public class SignInActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_sign_in);
         Injectors.appComponent().injectSignInActivity(this);
         String childId = sharedPreferences.getString(Constants.CHILD_ID, null);
-        Log.e("AASHA", "Child " + childId);
         if (null != childId) {
             launchMainActivity();
             finish();
@@ -83,7 +85,7 @@ public class SignInActivity extends AppCompatActivity implements
         btnSignIn.setOnClickListener(this);
         btnSignOut.setOnClickListener(this);
     }
-
+    
     @Override
     public void onClick(View view) {
         switch (view.getId()) {

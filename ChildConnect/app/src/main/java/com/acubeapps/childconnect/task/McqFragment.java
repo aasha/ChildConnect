@@ -1,5 +1,6 @@
 package com.acubeapps.childconnect.task;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -83,7 +84,6 @@ public class McqFragment extends Fragment implements View.OnClickListener{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View fragmentView =  inflater.inflate(R.layout.fragment_mcq, container, false);
         ButterKnife.bind(this, fragmentView);
         bindData();
@@ -132,6 +132,17 @@ public class McqFragment extends Fragment implements View.OnClickListener{
             }
         };
         countDownTimer.start();
+    }
+
+    @Override
+    public void onAttach(Activity context) {
+        super.onAttach(context);
+        if (context instanceof OnMcqFragmentInteractionListener) {
+            mListener = (OnMcqFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnMcqFragmentInteractionListener");
+        }
     }
 
     @Override

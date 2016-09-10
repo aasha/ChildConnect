@@ -18,6 +18,7 @@ import com.acubeapps.childconnect.model.QuestionType;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +27,8 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ProblemActivity extends AppCompatActivity implements McqFragment.OnMcqFragmentInteractionListener{
+public class ProblemActivity extends AppCompatActivity implements McqFragment.OnMcqFragmentInteractionListener ,
+    SubjectiveFragment.OnSubjectiveFragmentInteractionListener{
     private int currentQuestionId = 0;
     private int maxQuestionId = 5;
 
@@ -83,7 +85,7 @@ public class ProblemActivity extends AppCompatActivity implements McqFragment.On
             QuestionDetails questionDetails = new QuestionDetails();
             questionDetails.questionId = index + "";
             questionDetails.questionText = "How are you " + index;
-            questionDetails.questionType = QuestionType.MCQ;
+            questionDetails.questionType = QuestionType.SUBJECTIVE;
             questionDetails.options = new ArrayList<McqOptions>();
             McqOptions options = new McqOptions(1, "Good");
             questionDetails.options.add(options);
@@ -150,9 +152,20 @@ public class ProblemActivity extends AppCompatActivity implements McqFragment.On
             mcqFragment = McqFragment.newInstance(questionDetails);
             ft.add(R.id.activity_problem, mcqFragment, "MCQ");
         } else {
-//            SubjectiveFragment subjectiveFragment = SubjectiveFragment.newInstance(questionDetails);
-//            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            subjectiveFragment = SubjectiveFragment.newInstance(questionDetails);
+            ft.add(R.id.activity_problem, subjectiveFragment, "Subjective");
         }
         ft.commit();
+    }
+
+    @Override
+    public void onAttempt(File pictureFile) {
+        currentQuestionId++;
+        preferences.edit().putInt(Constants.QUESTION_ID, currentQuestionId).apply();
+        if (currentQuestionId < maxQuestionId) {
+            showQuestion(questionDetailsList.get(currentQuestionId));
+        } else {
+            sessionDone();
+        }
     }
 }
