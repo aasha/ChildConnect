@@ -4,7 +4,9 @@ import android.app.FragmentTransaction;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.acubeapps.childconnect.Constants;
 import com.acubeapps.childconnect.Injectors;
@@ -20,6 +22,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class ProblemActivity extends AppCompatActivity implements McqFragment.OnMcqFragmentInteractionListener{
     private int currentQuestionId = 0;
@@ -37,11 +42,18 @@ public class ProblemActivity extends AppCompatActivity implements McqFragment.On
     @Inject
     EventBus eventBus;
 
+    @BindView(R.id.btn_done)
+    Button btnDone;
+
+    @BindView(R.id.txt_intro)
+    TextView txtIntro;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_problem);
         Injectors.appComponent().injectProblemActivity(this);
+        ButterKnife.bind(this);
         String courseId = getIntent().getStringExtra(Constants.COURSE_ID);
         packageName = getIntent().getStringExtra(Constants.PACKAGE_NAME);
         currentQuestionId = preferences.getInt(Constants.QUESTION_ID, 0);
@@ -54,8 +66,15 @@ public class ProblemActivity extends AppCompatActivity implements McqFragment.On
             maxQuestionId = questionDetailsList.size();
         }
         preferences.edit().putInt(Constants.QUESTION_ID, currentQuestionId).apply();
-        QuestionDetails questionDetails = questionDetailsList.get(currentQuestionId);
-        showQuestion(questionDetails);
+        btnDone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                btnDone.setVisibility(View.GONE);
+                txtIntro.setVisibility(View.GONE);
+                QuestionDetails questionDetails = questionDetailsList.get(currentQuestionId);
+                showQuestion(questionDetails);
+            }
+        });
     }
 
     private List<QuestionDetails> getAllQuestions(String courseId){
@@ -83,8 +102,7 @@ public class ProblemActivity extends AppCompatActivity implements McqFragment.On
         if (currentQuestionId < maxQuestionId) {
             showQuestion(questionDetailsList.get(currentQuestionId));
         } else {
-            eventBus.post(new CourseClearedEvent(packageName, System.currentTimeMillis()));
-            finish();
+            sessionDone();
         }
     }
 
@@ -95,9 +113,29 @@ public class ProblemActivity extends AppCompatActivity implements McqFragment.On
         if (currentQuestionId < maxQuestionId) {
             showQuestion(questionDetailsList.get(currentQuestionId));
         } else {
-            eventBus.post(new CourseClearedEvent(packageName, System.currentTimeMillis()));
-            finish();
+            sessionDone();
         }
+    }
+
+    private void sessionDone(){
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        if (null != mcqFragment) {
+            ft.remove(mcqFragment);
+        }
+        if (null != subjectiveFragment) {
+            ft.remove(subjectiveFragment);
+        }
+        ft.commit();
+        btnDone.setVisibility(View.VISIBLE);
+        txtIntro.setVisibility(View.VISIBLE);
+        txtIntro.setText("Good job !! \n You are good to go back to your app ");
+        btnDone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                eventBus.post(new CourseClearedEvent(packageName, System.currentTimeMillis()));
+                finish();
+            }
+        });
     }
 
     private void showQuestion(QuestionDetails questionDetails) {
