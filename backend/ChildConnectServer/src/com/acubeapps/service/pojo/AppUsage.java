@@ -1,5 +1,8 @@
 package com.acubeapps.service.pojo;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;
+
+@DynamoDBDocument
 public class AppUsage {
     private String appName;
     private String displayName;
