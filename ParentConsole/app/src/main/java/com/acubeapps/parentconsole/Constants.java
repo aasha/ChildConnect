@@ -12,4 +12,8 @@ public class Constants {
     public static final String PACKAGE_NAME = "PACKAGE_NAME";
     public static final String QUESTION_ID = "QUESTION_ID";
 
+    public static final String GCM_REGISTRATION_ID = "gcm.registration.id";
+    public static final String EMAIL = "email";
+    public static final String GCM_SERVER_SYNC_DONE = "gcm.server.sync.done";
+
 }

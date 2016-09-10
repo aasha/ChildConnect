@@ -1,6 +1,8 @@
 package com.acubeapps.childconnect;
 
+import com.acubeapps.childconnect.gcm.RegistrationIntentService;
 import com.acubeapps.childconnect.service.CoreService;
+import com.acubeapps.childconnect.service.CourseSyncJobService;
 import com.acubeapps.childconnect.service.PolicySyncJobService;
 import com.acubeapps.childconnect.service.UploadSyncJobService;
 import com.acubeapps.childconnect.task.ProblemActivity;
@@ -28,4 +30,9 @@ public interface AppComponent {
 
     void injectPolicySyncJobService(PolicySyncJobService policySyncJobService);
 
+    void injectCourseSyncJobService(CourseSyncJobService courseSyncJobService);
+
+    void injectRegistrationIntentService(RegistrationIntentService registrationIntentService);
+
+    void injectEventReceiver(EventReceiver eventReceiver);
 }

@@ -3,6 +3,7 @@ package com.acubeapps.childconnect.network;
 import com.acubeapps.childconnect.model.BaseResponse;
 import com.acubeapps.childconnect.model.ChildRegisterRequest;
 import com.acubeapps.childconnect.model.ChildRegisterResponse;
+import com.acubeapps.childconnect.model.GcmRegisterRequest;
 import com.acubeapps.childconnect.model.GetAllCoursesRequest;
 import com.acubeapps.childconnect.model.GetAllCoursesResponse;
 import com.acubeapps.childconnect.model.GetCourseDetailsRequest;
@@ -14,6 +15,7 @@ import com.acubeapps.childconnect.model.GetUsageConfigResponse;
 import com.acubeapps.childconnect.model.ParentRegisterRequest;
 import com.acubeapps.childconnect.model.RegisterResponse;
 import com.acubeapps.childconnect.model.SendCollectedDataRequest;
+import com.acubeapps.childconnect.model.SendCourseResult;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -32,15 +34,21 @@ public interface ApiInterface {
     @POST("ChildConnectServer/upload/childDataUsage")
     Call<BaseResponse> sendCollectedData(@Body SendCollectedDataRequest req);
 
-    @POST("ChildConnectServer/getUsageConfig")
+    @POST("ChildConnectServer/download/childPolicy")
     Call<GetUsageConfigResponse> getUsageConfig(@Body GetUsageConfigRequest req);
 
     @POST("ChildConnectServer/getAllCourses")
     Call<GetAllCoursesResponse> getAllCourses(@Body GetAllCoursesRequest req);
 
-    @POST("ChildConnectServer/getCourseDetails")
+    @POST("ChildConnectServer/courses/get")
     Call<GetCourseDetailsResponse> getCourseDetails(@Body GetCourseDetailsRequest req);
 
     @POST("ChildConnectServer/getSolution")
     Call<GetSolutionResponse> getSolution(@Body GetSolutionRequest req);
+
+    @POST("ChildConnectServer/login/childGcm")
+    Call<BaseResponse> submitGcmToken(@Body GcmRegisterRequest req);
+
+    @POST("ChildConnectServer/courses/reportComplete")
+    Call<BaseResponse> sendCourseReport(@Body SendCourseResult req);
 }

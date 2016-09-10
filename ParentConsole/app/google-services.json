@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "868550366942",
-    "project_id": "childconnect-63028"
+    "project_number": "773509619008",
+    "project_id": "parentconnect-a39d8"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:868550366942:android:6aa88c40773cabb2",
+        "mobilesdk_app_id": "1:773509619008:android:9064a7d6753df650",
         "android_client_info": {
-          "package_name": "com.acubeapps.childconnect"
+          "package_name": "com.acubeapps.parentconsole"
         }
       },
       "oauth_client": [
         {
-          "client_id": "868550366942-t9ujdm1bh7hqc3jpoffdnfsegclrqo1b.apps.googleusercontent.com",
+          "client_id": "773509619008-u7ltm6eiq4832ri4a09p0oeg8crmtmui.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.acubeapps.childconnect",
+            "package_name": "com.acubeapps.parentconsole",
             "certificate_hash": "E0FEF83A551FB59096ADD8030CAEEB05C06537C1"
           }
         },
         {
-          "client_id": "868550366942-6rqqqq9tt6tle9714b1du3o0u0l0autv.apps.googleusercontent.com",
+          "client_id": "773509619008-dgccnu4mjo7b782rrv42i16gqsh674qr.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCYd_FO4pTr2RCRe6yxdHKDgKM3eBrSZPw"
+          "current_key": "AIzaSyAcLLBJUPwF04mZfDGXdETOgIY-lc371uk"
         }
       ],
       "services": {

@@ -1,6 +1,8 @@
 package com.acubeapps.parentconsole.network;
 
 import com.acubeapps.parentconsole.Constants;
+import com.acubeapps.parentconsole.model.BaseResponse;
+import com.acubeapps.parentconsole.model.GcmRegisterRequest;
 import com.acubeapps.parentconsole.model.GetAllCoursesRequest;
 import com.acubeapps.parentconsole.model.GetAllCoursesResponse;
 import com.acubeapps.parentconsole.model.GetCourseDetailsRequest;
@@ -44,6 +46,27 @@ public class NetworkInterface {
 
             @Override
             public void onFailure(Call<ParentRegisterResponse> call, Throwable t) {
+                networkResponse.networkFailure(t);
+            }
+        });
+    }
+
+    public void registerGcm(final String email, final String gcmToken, final NetworkResponse<BaseResponse> networkResponse) {
+        final GcmRegisterRequest gcmRegisterRequest = new GcmRegisterRequest(email, gcmToken);
+        Call<BaseResponse> call = networkInterface.submitGcmToken(gcmRegisterRequest);
+        call.enqueue(new Callback<BaseResponse>() {
+            @Override
+            public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
+                BaseResponse responseBody = response.body();
+                if (responseBody.status.equalsIgnoreCase(Constants.SUCCESS)) {
+                    networkResponse.success(responseBody, response);
+                } else {
+                    networkResponse.failure(responseBody);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseResponse> call, Throwable t) {
                 networkResponse.networkFailure(t);
             }
         });

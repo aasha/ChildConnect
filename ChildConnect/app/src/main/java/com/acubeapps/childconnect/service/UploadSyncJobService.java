@@ -45,7 +45,7 @@ public class UploadSyncJobService extends JobService {
         String childId = preferences.getString(Constants.CHILD_ID, null);
         Log.d(Constants.LOG_TAG, "uploading app usage data " + startTime + " : " + endTime);
         List<AppUsage> appUsageList = Device.getAppUsage(this, startTime, endTime);
-        networkInterface.sendCollectedData(childId, appUsageList, null, new NetworkResponse<BaseResponse>() {
+        networkInterface.sendCollectedData(childId, String.valueOf(startTime), appUsageList, null, new NetworkResponse<BaseResponse>() {
             @Override
             public void success(BaseResponse baseResponse, Response response) {
                 Log.d(Constants.LOG_TAG, "successfully uploaded usage data");

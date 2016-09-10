@@ -1,5 +1,7 @@
 package com.acubeapps.parentconsole.network;
 
+import com.acubeapps.parentconsole.model.BaseResponse;
+import com.acubeapps.parentconsole.model.GcmRegisterRequest;
 import com.acubeapps.parentconsole.model.GetAllCoursesRequest;
 import com.acubeapps.parentconsole.model.GetAllCoursesResponse;
 import com.acubeapps.parentconsole.model.GetCourseDetailsRequest;
@@ -28,4 +30,7 @@ public interface ApiInterface {
 
     @POST("ChildConnectServer/getSolution")
     Call<GetSolutionResponse> getSolution(@Body GetSolutionRequest req);
+
+    @POST("ChildConnectServer/login/parentGcm")
+    Call<BaseResponse> submitGcmToken(@Body GcmRegisterRequest req);
 }
