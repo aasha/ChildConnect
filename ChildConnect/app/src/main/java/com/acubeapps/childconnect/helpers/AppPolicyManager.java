@@ -78,9 +78,9 @@ public class AppPolicyManager {
         mcqOptionsList.add(new McqOptions(2, "two"));
         mcqOptionsList.add(new McqOptions(3, "three"));
         mcqOptionsList.add(new McqOptions(4, "four"));
-        String questionText = "dummy question";
+        String questionText = "How are you doing ?";
         questionDetailsList.add(new QuestionDetails("1", questionText, QuestionType.MCQ, mcqOptionsList, 1));
-        questionDetailsList.add(new QuestionDetails("2", "subjective", QuestionType.SUBJECTIVE, null, -1));
+        questionDetailsList.add(new QuestionDetails("2", "Take a pic of something red", QuestionType.SUBJECTIVE, null, -1));
         appConfigStore.insertOrUpdateCourse(new LocalCourse(courseId, questionDetailsList));
     }
 
