@@ -18,8 +18,10 @@ import com.acubeapps.childconnect.model.GetUsageConfigRequest;
 import com.acubeapps.childconnect.model.GetUsageConfigResponse;
 import com.acubeapps.childconnect.model.LocalCourse;
 import com.acubeapps.childconnect.model.ParentRegisterRequest;
+import com.acubeapps.childconnect.model.QuestionDetails;
 import com.acubeapps.childconnect.model.RegisterResponse;
 import com.acubeapps.childconnect.model.SendCollectedDataRequest;
+import com.acubeapps.childconnect.model.SendCourseResult;
 
 import java.util.List;
 
@@ -46,10 +48,6 @@ public class NetworkInterface {
         call.enqueue(new Callback<BaseResponse>() {
             @Override
             public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
-                Log.d("Ajitesh", response.raw().toString());
-                Log.d("Ajitesh", response.message());
-                Log.d("Ajitesh", "email - " + email);
-                Log.d("Ajitesh", "gcmtoken - " + gcmToken);
                 BaseResponse responseBody = response.body();
                 if (responseBody.status.equalsIgnoreCase(Constants.SUCCESS)) {
                     networkResponse.success(responseBody, response);
@@ -213,6 +211,28 @@ public class NetworkInterface {
 
             @Override
             public void onFailure(Call<GetSolutionResponse> call, Throwable t) {
+                networkResponse.networkFailure(t);
+            }
+        });
+    }
+
+    public void sendCompleteResult(String childId, String courseId, List<QuestionDetails> questionList,
+                                   final NetworkResponse<BaseResponse> networkResponse) {
+        final SendCourseResult sendCourseResult = new SendCourseResult(childId, courseId, questionList);
+        Call<BaseResponse> call = networkInterface.sendCourseReport(sendCourseResult);
+        call.enqueue(new Callback<BaseResponse>() {
+            @Override
+            public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
+                BaseResponse responseBody = response.body();
+                if (responseBody.status.equalsIgnoreCase(Constants.SUCCESS)) {
+                    networkResponse.success(responseBody, response);
+                } else {
+                    networkResponse.failure(responseBody);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseResponse> call, Throwable t) {
                 networkResponse.networkFailure(t);
             }
         });

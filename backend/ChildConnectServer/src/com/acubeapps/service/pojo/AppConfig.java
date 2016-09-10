@@ -1,10 +1,13 @@
 package com.acubeapps.service.pojo;
 
+import java.util.List;
+
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;
+
+@DynamoDBDocument
 public class AppConfig {
     private String appName;
-    private String startTime;
-    private String endTime;
-    private String duration;
+    private List<AppSessionConfig> appSessionConfigList;
 
     public String getAppName() {
         return appName;
@@ -14,27 +17,11 @@ public class AppConfig {
         this.appName = appName;
     }
 
-    public String getStartTime() {
-        return startTime;
+    public List<AppSessionConfig> getAppSessionConfigList() {
+        return appSessionConfigList;
     }
 
-    public void setStartTime(String startTime) {
-        this.startTime = startTime;
-    }
-
-    public String getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(String endTime) {
-        this.endTime = endTime;
-    }
-
-    public String getDuration() {
-        return duration;
-    }
-
-    public void setDuration(String duration) {
-        this.duration = duration;
+    public void setAppSessionConfigList(List<AppSessionConfig> appSessionConfigList) {
+        this.appSessionConfigList = appSessionConfigList;
     }
 }

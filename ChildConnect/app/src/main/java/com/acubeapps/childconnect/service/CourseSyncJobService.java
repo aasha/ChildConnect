@@ -44,7 +44,8 @@ public class CourseSyncJobService extends JobService {
         networkInterface.getCourseDetails(courseId, new NetworkResponse<GetCourseDetailsResponse>() {
             @Override
             public void success(GetCourseDetailsResponse getCourseDetailsResponse, Response response) {
-                List<QuestionDetails> questionDetailsList = getCourseDetailsResponse.courseDetails;
+                Log.d(Constants.LOG_TAG, "course details received");
+                List<QuestionDetails> questionDetailsList = getCourseDetailsResponse.courseDetails.questionList;
                 appPolicyManager.storeCourseDetails(new LocalCourse(courseId, questionDetailsList));
                 CourseSyncJobService.this.jobFinished(jobParameters, false);
             }

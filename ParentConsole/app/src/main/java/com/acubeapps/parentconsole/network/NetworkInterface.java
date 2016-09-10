@@ -1,0 +1,115 @@
+package com.acubeapps.parentconsole.network;
+
+import com.acubeapps.parentconsole.Constants;
+import com.acubeapps.parentconsole.model.GetAllCoursesRequest;
+import com.acubeapps.parentconsole.model.GetAllCoursesResponse;
+import com.acubeapps.parentconsole.model.GetCourseDetailsRequest;
+import com.acubeapps.parentconsole.model.GetCourseDetailsResponse;
+import com.acubeapps.parentconsole.model.GetSolutionRequest;
+import com.acubeapps.parentconsole.model.GetSolutionResponse;
+import com.acubeapps.parentconsole.model.ParentRegisterRequest;
+import com.acubeapps.parentconsole.model.ParentRegisterResponse;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+/**
+ * Created by aasha.medhi on 9/10/16.
+ */
+public class NetworkInterface {
+    private static ApiInterface networkInterface;
+    private NetworkInterface() {
+        networkInterface = ApiClient.getClient().create(ApiInterface.class);
+    }
+
+    public static NetworkInterface getInstance() {
+        return new NetworkInterface();
+    }
+
+    public void register(String name, String email, String password, final NetworkResponse<ParentRegisterResponse> networkResponse) {
+        ParentRegisterRequest parentRegisterRequest = new ParentRegisterRequest(name, email,
+                password);
+        Call<ParentRegisterResponse> call = networkInterface.register(parentRegisterRequest);
+        call.enqueue(new Callback<ParentRegisterResponse>() {
+            @Override
+            public void onResponse(Call<ParentRegisterResponse> call, Response<ParentRegisterResponse> response) {
+                ParentRegisterResponse responseBody = response.body();
+                if (responseBody.status.equals(Constants.SUCCESS)) {
+                    networkResponse.success(responseBody, response);
+                } else {
+                    networkResponse.failure(responseBody);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ParentRegisterResponse> call, Throwable t) {
+                networkResponse.networkFailure(t);
+            }
+        });
+    }
+
+    public void getAllCourses(String childId, final NetworkResponse<GetAllCoursesResponse> networkResponse) {
+        GetAllCoursesRequest getAllCoursesRequest = new GetAllCoursesRequest(childId);
+        Call<GetAllCoursesResponse> call = networkInterface.getAllCourses(getAllCoursesRequest);
+        call.enqueue(new Callback<GetAllCoursesResponse>() {
+            @Override
+            public void onResponse(Call<GetAllCoursesResponse> call, Response<GetAllCoursesResponse> response) {
+                GetAllCoursesResponse responseBody = response.body();
+                if (responseBody.status.equals(Constants.SUCCESS)) {
+                    networkResponse.success(responseBody, response);
+                } else {
+                    networkResponse.failure(responseBody);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetAllCoursesResponse> call, Throwable t) {
+                networkResponse.networkFailure(t);
+            }
+        });
+    }
+
+    public void getCourseDetails(String courseId, final NetworkResponse<GetCourseDetailsResponse> networkResponse) {
+        GetCourseDetailsRequest getCourseDetailsRequest = new GetCourseDetailsRequest(courseId);
+        Call<GetCourseDetailsResponse> call = networkInterface.getCourseDetails(getCourseDetailsRequest);
+        call.enqueue(new Callback<GetCourseDetailsResponse>() {
+            @Override
+            public void onResponse(Call<GetCourseDetailsResponse> call, Response<GetCourseDetailsResponse> response) {
+                GetCourseDetailsResponse responseBody = response.body();
+                if (responseBody.status.equals(Constants.SUCCESS)) {
+                    networkResponse.success(responseBody, response);
+                } else {
+                    networkResponse.failure(responseBody);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetCourseDetailsResponse> call, Throwable t) {
+                networkResponse.networkFailure(t);
+            }
+        });
+    }
+
+    public void getSolution(String courseId, String questionId, String solutionUrl,
+                            final NetworkResponse<GetSolutionResponse> networkResponse) {
+        GetSolutionRequest getSolutionRequest = new GetSolutionRequest(courseId, questionId, solutionUrl);
+        Call<GetSolutionResponse> call = networkInterface.getSolution(getSolutionRequest);
+        call.enqueue(new Callback<GetSolutionResponse>() {
+            @Override
+            public void onResponse(Call<GetSolutionResponse> call, Response<GetSolutionResponse> response) {
+                GetSolutionResponse responseBody = response.body();
+                if (responseBody.status.equals(Constants.SUCCESS)) {
+                    networkResponse.success(responseBody, response);
+                } else {
+                    networkResponse.failure(responseBody);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetSolutionResponse> call, Throwable t) {
+                networkResponse.networkFailure(t);
+            }
+        });
+    }
+}

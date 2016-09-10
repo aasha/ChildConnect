@@ -68,9 +68,7 @@ public class SignInActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_sign_in);
         Injectors.appComponent().injectSignInActivity(this);
         String childId = sharedPreferences.getString(Constants.CHILD_ID, null);
-        Log.e("AASHA", "Child " + childId);
         if (null != childId) {
-            launchMainActivity();
             finish();
         }
         ButterKnife.bind(this);
@@ -168,7 +166,6 @@ public class SignInActivity extends AppCompatActivity implements
                         sharedPreferences.edit().putString(Constants.EMAIL, acct.getEmail()).apply();
                         eventBus.post(new ChildRegisteredEvent());
                         registerGcmToken();
-                        launchMainActivity();
                         finish();
                     }
 
@@ -192,11 +189,6 @@ public class SignInActivity extends AppCompatActivity implements
         Log.d(Constants.LOG_TAG, "going to launch registrationIntentService");
         Intent registerGcmIntent = new Intent(this, RegistrationIntentService.class);
         this.startService(registerGcmIntent);
-    }
-
-    private void launchMainActivity() {
-        Intent intent = new Intent(this, PermissionsActivity.class);
-        startActivity(intent);
     }
 
     private void signIn() {

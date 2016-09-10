@@ -23,7 +23,8 @@
         android:layout_centerHorizontal="true"
         android:id="@+id/txt_question"
         android:layout_marginTop="100dp"
-        android:text="@string/hello_blank_fragment" />
+        android:textColor="@color/progress_bar_main"
+        android:textSize="20sp"/>
 
     <Button
         android:layout_width="match_parent"
@@ -34,6 +35,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:id="@+id/btn_option_1"
+        android:textColor="#FFF"
         android:background="@drawable/rounded_corner_blue"/>
 
     <Button
@@ -45,6 +47,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:id="@+id/btn_option_2"
+        android:textColor="#FFF"
         android:background="@drawable/rounded_corner_blue"/>
 
     <Button
@@ -56,6 +59,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:id="@+id/btn_option_3"
+        android:textColor="#FFF"
         android:background="@drawable/rounded_corner_blue"/>
 
     <Button
@@ -67,6 +71,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:id="@+id/btn_option_4"
+        android:textColor="#FFF"
         android:background="@drawable/rounded_corner_blue"/>
 
 </RelativeLayout>

@@ -5,7 +5,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
+import com.acubeapps.childconnect.Constants;
 import com.acubeapps.childconnect.model.AppConfig;
 import com.acubeapps.childconnect.model.AppSessionConfig;
 import com.acubeapps.childconnect.model.AppStatus;
@@ -59,12 +61,12 @@ public class SqliteAppConfigStore extends SQLiteOpenHelper {
                 + ")";
 
         final String CreateCourseTable = "CREATE TABLE " + COURSETABLE + "("
-                + COURSE_ID + " TEXT PRIMARY KEY,"
+                + COURSE_ID + " TEXT,"
                 + QUESTION_ID + " TEXT,"
                 + QUESTION_TEXT + " TEXT,"
                 + QUESTION_TYPE + " INTEGER,"
                 + MCQ_OPTIONS + " BLOB,"
-                + SOLUTION + " INTEGER"
+                + SOLUTION + " TEXT"
                 + ")";
 
         db.execSQL(CreateAppConfigTable);
@@ -123,12 +125,13 @@ public class SqliteAppConfigStore extends SQLiteOpenHelper {
         String courseId = course.getCourseId();
         deleteCourse(courseId);
         List<QuestionDetails> questionDetailsList = course.getQuestionDetailsList();
+        Log.d(Constants.LOG_TAG, "course list size - " + questionDetailsList.size());
         for (QuestionDetails questionDetails : questionDetailsList) {
             ContentValues contentValues = new ContentValues();
             contentValues.put(COURSE_ID, courseId);
             contentValues.put(QUESTION_ID, questionDetails.questionId);
             contentValues.put(QUESTION_TEXT, questionDetails.questionText);
-            contentValues.put(QUESTION_TYPE, (questionDetails.questionType.equals(QuestionType.MCQ) ? 1 : -1));
+            contentValues.put(QUESTION_TYPE, (questionDetails.questionType.equals(QuestionType.mcq) ? 1 : -1));
             Gson gson = new Gson();
             contentValues.put(MCQ_OPTIONS, gson.toJson(questionDetails.options).getBytes());
             contentValues.put(SOLUTION, questionDetails.solution);
@@ -138,16 +141,17 @@ public class SqliteAppConfigStore extends SQLiteOpenHelper {
 
     public LocalCourse getCourse(String courseId) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor =  db.rawQuery("SELECT * FROM " + COURSETABLE + " WHERE "
-                + COURSE_ID + "='" + courseId + "'" , null);
+        String query = "SELECT * FROM " + COURSETABLE + " WHERE "
+                + COURSE_ID + "='" + courseId + "'";
+        Cursor cursor =  db.rawQuery( query, null);
         List<QuestionDetails> questionDetailsList = new ArrayList<>();
         if (cursor.moveToFirst()) {
             do {
                 String localQuestionId = cursor.getString(cursor.getColumnIndex(QUESTION_ID));
                 String localQuestionText = cursor.getString(cursor.getColumnIndex(QUESTION_TEXT));
                 int questionType = cursor.getInt(cursor.getColumnIndex(QUESTION_TYPE));
-                QuestionType localQuestionType = questionType > 0 ? QuestionType.MCQ : QuestionType.SUBJECTIVE;
-                int solution = cursor.getInt(cursor.getColumnIndex(SOLUTION));
+                QuestionType localQuestionType = questionType > 0 ? QuestionType.mcq : QuestionType.subjective;
+                String solution = cursor.getString(cursor.getColumnIndex(SOLUTION));
                 byte[] blob = cursor.getBlob(cursor.getColumnIndex(MCQ_OPTIONS));
                 String json = new String(blob);
                 Gson gson = new Gson();

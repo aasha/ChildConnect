@@ -11,9 +11,10 @@ public class QuestionDetails implements Serializable{
     public String questionText;
     public QuestionType questionType;
     public List<McqOptions> options;
-    public int solution;
+    public String solution;
 
-    public QuestionDetails(String questionId, String questionText, QuestionType questionType, List<McqOptions> options, int solution) {
+    public QuestionDetails(String questionId, String questionText, QuestionType questionType,
+                           List<McqOptions> options, String solution) {
         this.questionId = questionId;
         this.questionText = questionText;
         this.questionType = questionType;
@@ -57,11 +58,11 @@ public class QuestionDetails implements Serializable{
         this.options = options;
     }
 
-    public int getSolution() {
+    public String getSolution() {
         return solution;
     }
 
-    public void setSolution(int solution) {
+    public void setSolution(String solution) {
         this.solution = solution;
     }
 }

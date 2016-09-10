@@ -30,5 +30,5 @@ public class Constants {
     public static final String MY_ACCESS_KEY_ID = "AKIAIUJ6NRF6TVRCBLEA";
     public static final String MY_SECRET_KEY = "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";
 
-    public static final String MY_BUCKET = "childConnect";
+    public static final String MY_BUCKET = "childconnect";
 }

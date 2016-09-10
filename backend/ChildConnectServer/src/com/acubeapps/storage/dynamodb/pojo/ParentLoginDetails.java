@@ -11,6 +11,7 @@ public class ParentLoginDetails {
     private String name;
     private String email;
     private String password;
+    private String gcmToken;
 
     @DynamoDBIndexHashKey(attributeName = "parentId", globalSecondaryIndexName = "parentId-index")
     public String getParentId() {
@@ -45,4 +46,12 @@ public class ParentLoginDetails {
     public void setPassword(String password) {
         this.password = password;
     }
+
+	public String getGcmToken() {
+		return gcmToken;
+	}
+
+	public void setGcmToken(String gcmToken) {
+		this.gcmToken = gcmToken;
+	}
 }

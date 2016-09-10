@@ -1,7 +1,10 @@
 package com.acubeapps.childconnect.service;
 
+import android.app.job.JobInfo;
 import android.app.job.JobParameters;
+import android.app.job.JobScheduler;
 import android.app.job.JobService;
+import android.content.ComponentName;
 import android.content.SharedPreferences;
 import android.util.Log;
 
@@ -46,6 +49,7 @@ public class PolicySyncJobService extends JobService {
         networkInterface.getUsageConfig(childId, new NetworkResponse<GetUsageConfigResponse>() {
             @Override
             public void success(GetUsageConfigResponse getUsageConfigResponse, Response response) {
+                Log.d(Constants.LOG_TAG, "app policy received");
                 Policy policy = getUsageConfigResponse.policy;
                 String courseId = policy.courseId;
                 preferences.edit().putString(Constants.COURSE_ID, courseId).apply();
@@ -53,6 +57,7 @@ public class PolicySyncJobService extends JobService {
                 for (AppConfig appConfig : appConfigList) {
                     appPolicyManager.storeAppConfig(appConfig);
                 }
+                startCourseSyncJob();
                 PolicySyncJobService.this.jobFinished(jobParameters, false);
             }
 
@@ -69,6 +74,28 @@ public class PolicySyncJobService extends JobService {
             }
         });
         return true;
+    }
+
+    private void startCourseSyncJob() {
+        JobScheduler jobScheduler = (JobScheduler) this.getSystemService(JOB_SCHEDULER_SERVICE);
+        ComponentName courseSyncComponent = new ComponentName(this, CourseSyncJobService.class);
+        JobInfo policyJobInfo = new JobInfo.Builder(getMaxPendingId() + 1, courseSyncComponent)
+                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
+                .setPersisted(true)
+                .build();
+        jobScheduler.schedule(policyJobInfo);
+    }
+
+    private int getMaxPendingId() {
+        JobScheduler jobScheduler = (JobScheduler) this.getSystemService(JOB_SCHEDULER_SERVICE);
+        List<JobInfo> jobInfoList = jobScheduler.getAllPendingJobs();
+        int maxJobInfoId = 1;
+        for (JobInfo jobInfo : jobInfoList) {
+            if (jobInfo.getId() > maxJobInfoId) {
+                maxJobInfoId = jobInfo.getId();
+            }
+        }
+        return maxJobInfoId;
     }
 
     @Override

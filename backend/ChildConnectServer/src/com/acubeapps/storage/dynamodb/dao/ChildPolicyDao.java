@@ -5,19 +5,19 @@ import com.acubeapps.storage.dynamodb.pojo.ChildPolicyDetails;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 
 public class ChildPolicyDao {
-	private DynamoDBMapper mapper;
+    private DynamoDBMapper mapper;
 
-	public ChildPolicyDao() {
-		mapper = new DynamoDBMapper(DynamoDbConfigProvider.getDynamoDb());
-	}
+    public ChildPolicyDao() {
+        mapper = new DynamoDBMapper(DynamoDbConfigProvider.getDynamoDb());
+    }
 
-	public void save(ChildPolicyDetails pojo) {
-		mapper.save(pojo);
-	}
+    public void save(ChildPolicyDetails pojo) {
+        mapper.save(pojo);
+    }
 
-	public ChildPolicyDetails get(String childId) {
-		ChildPolicyDetails details = new ChildPolicyDetails();
-		details.setChildId(childId);
-		return mapper.load(details);
-	}
+    public ChildPolicyDetails get(String childId) {
+        ChildPolicyDetails details = new ChildPolicyDetails();
+        details.setChildId(childId);
+        return mapper.load(details);
+    }
 }

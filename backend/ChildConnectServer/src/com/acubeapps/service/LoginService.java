@@ -11,6 +11,8 @@ import javax.ws.rs.core.MediaType;
 
 import com.acubeapps.service.pojo.ChildLoginRequest;
 import com.acubeapps.service.pojo.ChildLoginResponse;
+import com.acubeapps.service.pojo.GsmRegisterRequest;
+import com.acubeapps.service.pojo.GsmRegisterResponse;
 import com.acubeapps.service.pojo.ParentLoginRequest;
 import com.acubeapps.service.pojo.ParentLoginResponse;
 import com.acubeapps.storage.dynamodb.dao.ChildLoginDetailsDao;
@@ -78,6 +80,44 @@ public class LoginService {
         } else {
         	response.setStatus("success");
         	response.setChildId(details.getChildId());
+        }
+
+        return response;
+    }
+
+    @POST
+    @Path("/parentGcm")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public GsmRegisterResponse registerParentGsm(final GsmRegisterRequest loginRequest) {
+    	GsmRegisterResponse response = new GsmRegisterResponse();
+
+        ParentLoginDetails details = parentLoginDao.get(loginRequest.getEmail());
+        if (details == null) {
+            response.setStatus("failure");
+        } else {
+        	details.setGcmToken(loginRequest.getGcmToken());
+        	parentLoginDao.save(details);
+        	response.setStatus("success");
+        }
+
+        return response;
+    }
+
+    @POST
+    @Path("/childGcm")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public GsmRegisterResponse childLogin(final GsmRegisterRequest loginRequest) {
+    	GsmRegisterResponse response = new GsmRegisterResponse();
+
+        ChildLoginDetails details = childLoginDao.get(loginRequest.getEmail());
+        if (details == null) {
+            response.setStatus("failure");
+        } else {
+        	details.setGcmToken(loginRequest.getGcmToken());
+        	childLoginDao.save(details);
+        	response.setStatus("success");
         }
 
         return response;

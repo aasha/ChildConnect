@@ -15,6 +15,7 @@ import com.acubeapps.childconnect.model.GetUsageConfigResponse;
 import com.acubeapps.childconnect.model.ParentRegisterRequest;
 import com.acubeapps.childconnect.model.RegisterResponse;
 import com.acubeapps.childconnect.model.SendCollectedDataRequest;
+import com.acubeapps.childconnect.model.SendCourseResult;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -39,7 +40,7 @@ public interface ApiInterface {
     @POST("ChildConnectServer/getAllCourses")
     Call<GetAllCoursesResponse> getAllCourses(@Body GetAllCoursesRequest req);
 
-    @POST("ChildConnectServer/getCourseDetails")
+    @POST("ChildConnectServer/courses/get")
     Call<GetCourseDetailsResponse> getCourseDetails(@Body GetCourseDetailsRequest req);
 
     @POST("ChildConnectServer/getSolution")
@@ -47,4 +48,7 @@ public interface ApiInterface {
 
     @POST("ChildConnectServer/login/childGcm")
     Call<BaseResponse> submitGcmToken(@Body GcmRegisterRequest req);
+
+    @POST("ChildConnectServer/courses/reportComplete")
+    Call<BaseResponse> sendCourseReport(@Body SendCourseResult req);
 }

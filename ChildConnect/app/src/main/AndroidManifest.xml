@@ -4,6 +4,9 @@
     package="com.acubeapps.childconnect">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission
         android:name="android.permission.PACKAGE_USAGE_STATS"
         tools:ignore="ProtectedPermissions" />
@@ -11,7 +14,6 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <permission android:name="com.acubeapps.childconnect.permission.C2D_MESSAGE" android:protectionLevel="signature" />
     <uses-permission android:name="com.acubeapps.childconnect.permission.C2D_MESSAGE"/>
-
 
     <application
         android:name=".MainApplication"
@@ -21,11 +23,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".SignInActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <service android:name=".service.CoreService"
@@ -41,6 +38,10 @@
             android:enabled="true" />
 
         <service android:name=".service.UploadSyncJobService"
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            android:enabled="true" />
+
+        <service android:name=".service.CourseSyncJobService"
             android:permission="android.permission.BIND_JOB_SERVICE"
             android:enabled="true" />
 
@@ -62,7 +63,13 @@
         <activity
             android:name=".PermissionsActivity"
             android:label="@string/title_activity_permissions"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
         <activity android:name=".task.ProblemActivity"
             android:theme="@style/AppTheme.NoActionBar"></activity>
 

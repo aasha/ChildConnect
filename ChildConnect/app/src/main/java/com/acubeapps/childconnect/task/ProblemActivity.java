@@ -4,6 +4,7 @@ import android.app.FragmentTransaction;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -12,12 +13,18 @@ import com.acubeapps.childconnect.Constants;
 import com.acubeapps.childconnect.Injectors;
 import com.acubeapps.childconnect.R;
 import com.acubeapps.childconnect.events.CourseClearedEvent;
-import com.acubeapps.childconnect.model.McqOptions;
+import com.acubeapps.childconnect.helpers.AppPolicyManager;
+import com.acubeapps.childconnect.model.BaseResponse;
+import com.acubeapps.childconnect.model.LocalCourse;
 import com.acubeapps.childconnect.model.QuestionDetails;
 import com.acubeapps.childconnect.model.QuestionType;
+import com.acubeapps.childconnect.network.NetworkInterface;
+import com.acubeapps.childconnect.network.NetworkResponse;
+import com.acubeapps.childconnect.utils.Device;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,13 +32,17 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Response;
 
-public class ProblemActivity extends AppCompatActivity implements McqFragment.OnMcqFragmentInteractionListener{
+public class ProblemActivity extends AppCompatActivity implements McqFragment.OnMcqFragmentInteractionListener ,
+    SubjectiveFragment.OnSubjectiveFragmentInteractionListener{
     private int currentQuestionId = 0;
-    private int maxQuestionId = 5;
+    private int maxQuestionId = 2;
 
     String packageName;
     List<QuestionDetails> questionDetailsList;
+
+    List<QuestionDetails> solutionList;
 
     McqFragment mcqFragment;
     SubjectiveFragment subjectiveFragment;
@@ -40,7 +51,13 @@ public class ProblemActivity extends AppCompatActivity implements McqFragment.On
     SharedPreferences preferences;
 
     @Inject
+    AppPolicyManager appPolicyManager;
+
+    @Inject
     EventBus eventBus;
+
+    @Inject
+    NetworkInterface networkInterface;
 
     @BindView(R.id.btn_done)
     Button btnDone;
@@ -57,11 +74,14 @@ public class ProblemActivity extends AppCompatActivity implements McqFragment.On
         String courseId = preferences.getString(Constants.COURSE_ID, null);
         packageName = getIntent().getStringExtra(Constants.PACKAGE_NAME);
         currentQuestionId = preferences.getInt(Constants.QUESTION_ID, 0);
-        questionDetailsList = getAllQuestions(courseId);
+        LocalCourse courseDetails = appPolicyManager.getCourse();
+        questionDetailsList = courseDetails.getQuestionDetailsList();
+        solutionList = new ArrayList<>();
+        solutionList.addAll(questionDetailsList);
         if (currentQuestionId >= questionDetailsList.size()) {
             currentQuestionId = 0;
         }
-        maxQuestionId = currentQuestionId + 5;
+        maxQuestionId = currentQuestionId + 2;
         if (maxQuestionId >= questionDetailsList.size()) {
             maxQuestionId = questionDetailsList.size();
         }
@@ -77,26 +97,9 @@ public class ProblemActivity extends AppCompatActivity implements McqFragment.On
         });
     }
 
-    private List<QuestionDetails> getAllQuestions(String courseId){
-        List<QuestionDetails> questionDetailsList = new ArrayList<>();
-        for (int index = 0; index < 10; index++) {
-            QuestionDetails questionDetails = new QuestionDetails();
-            questionDetails.questionId = index + "";
-            questionDetails.questionText = "How are you " + index;
-            questionDetails.questionType = QuestionType.MCQ;
-            questionDetails.options = new ArrayList<McqOptions>();
-            McqOptions options = new McqOptions(1, "Good");
-            questionDetails.options.add(options);
-            options = new McqOptions(2, "Bad");
-            questionDetails.options.add(options);
-            questionDetails.solution = 1;
-            questionDetailsList.add(questionDetails);
-        }
-        return questionDetailsList;
-    }
-
     @Override
-    public void onSuccessfulAttempt() {
+    public void onSuccessfulAttempt(String optionSelected) {
+        solutionList.get(currentQuestionId).solution = optionSelected;
         currentQuestionId++;
         preferences.edit().putInt(Constants.QUESTION_ID, currentQuestionId).apply();
         if (currentQuestionId < maxQuestionId) {
@@ -107,7 +110,8 @@ public class ProblemActivity extends AppCompatActivity implements McqFragment.On
     }
 
     @Override
-    public void onFailedAttempt() {
+    public void onFailedAttempt(String optionSelected) {
+        solutionList.get(currentQuestionId).solution = optionSelected;
         currentQuestionId++;
         preferences.edit().putInt(Constants.QUESTION_ID, currentQuestionId).apply();
         if (currentQuestionId < maxQuestionId) {
@@ -133,6 +137,24 @@ public class ProblemActivity extends AppCompatActivity implements McqFragment.On
             @Override
             public void onClick(View view) {
                 eventBus.post(new CourseClearedEvent(packageName, System.currentTimeMillis()));
+                String childId = preferences.getString(Constants.CHILD_ID, null);
+                String courseId = preferences.getString(Constants.COURSE_ID, null);
+                networkInterface.sendCompleteResult(childId, courseId, solutionList, new NetworkResponse<BaseResponse>() {
+                    @Override
+                    public void success(BaseResponse baseResponse, Response response) {
+                        Log.d(Constants.LOG_TAG, "results submitted to server");
+                    }
+
+                    @Override
+                    public void failure(BaseResponse baseResponse) {
+
+                    }
+
+                    @Override
+                    public void networkFailure(Throwable error) {
+
+                    }
+                });
                 finish();
             }
         });
@@ -146,13 +168,26 @@ public class ProblemActivity extends AppCompatActivity implements McqFragment.On
         if (null != subjectiveFragment) {
             ft.remove(subjectiveFragment);
         }
-        if (questionDetails.questionType == QuestionType.MCQ) {
+        if (questionDetails.questionType == QuestionType.mcq) {
             mcqFragment = McqFragment.newInstance(questionDetails);
-            ft.add(R.id.activity_problem, mcqFragment, "MCQ");
+            ft.add(R.id.activity_problem, mcqFragment, "mcq");
         } else {
-//            SubjectiveFragment subjectiveFragment = SubjectiveFragment.newInstance(questionDetails);
-//            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            subjectiveFragment = SubjectiveFragment.newInstance(questionDetails);
+            ft.add(R.id.activity_problem, subjectiveFragment, "Subjective");
         }
         ft.commit();
+    }
+
+    @Override
+    public void onAttempt(File pictureFile) {
+        String path = Device.uploadImageToServer(this, pictureFile);
+        solutionList.get(currentQuestionId).solution = path;
+        currentQuestionId++;
+        preferences.edit().putInt(Constants.QUESTION_ID, currentQuestionId).apply();
+        if (currentQuestionId < maxQuestionId) {
+            showQuestion(questionDetailsList.get(currentQuestionId));
+        } else {
+            sessionDone();
+        }
     }
 }

@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.util.Log;
 
 import com.acubeapps.childconnect.Constants;
 import com.acubeapps.childconnect.gcm.RegistrationIntentService;
@@ -17,15 +18,12 @@ import com.acubeapps.childconnect.service.CoreService;
 import com.acubeapps.childconnect.service.DeviceSyncService;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.mobileconnectors.s3.transfermanager.TransferManager;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
-import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.Region;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -148,7 +146,7 @@ public class Device {
             @Override
             public void onStateChanged(int i, TransferState transferState) {
                 if (transferState.equals(TransferState.COMPLETED)) {
-
+                    Log.d(Constants.LOG_TAG, "upload completed for image");
                 }
             }
 
@@ -162,7 +160,6 @@ public class Device {
 
             }
         });
-
         String path = "https://" + Constants.MY_BUCKET + ".s3.amazonaws.com/" + file.getName();
         return path;
     }
