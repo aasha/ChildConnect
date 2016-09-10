@@ -14,4 +14,9 @@ public class Constants {
     public static final String QUESTION_ID = "QUESTION_ID";
     public static final String SOURCE_GOOGLE = "Google";
     public static final String CHILD_ID = "CHILD_ID";
+
+    public static final String LAST_UPLOAD_STATUS = "upload.status";
+    public static final String LAST_SUCCESSFUL_UPLOAD_TIME = "last.successful.upload.time";
+    public static final String JOB_START_TIME = "job.start.time";
+    public static final String JOB_END_TIME = "job.end.time";
 }

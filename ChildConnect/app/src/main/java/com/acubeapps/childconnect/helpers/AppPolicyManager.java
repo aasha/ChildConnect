@@ -1,28 +1,37 @@
 package com.acubeapps.childconnect.helpers;
 
+import android.content.Context;
+
+import com.acubeapps.childconnect.events.ChildRegisteredEvent;
 import com.acubeapps.childconnect.model.AppConfig;
 import com.acubeapps.childconnect.model.AppSessionConfig;
-import com.acubeapps.childconnect.model.AppStatus;
 import com.acubeapps.childconnect.model.LocalCourse;
 import com.acubeapps.childconnect.model.McqOptions;
 import com.acubeapps.childconnect.model.QuestionDetails;
 import com.acubeapps.childconnect.model.QuestionType;
 import com.acubeapps.childconnect.store.SqliteAppConfigStore;
 import com.acubeapps.childconnect.utils.CommonUtils;
+import com.acubeapps.childconnect.utils.Device;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by aasha.medhi on 9/10/16.
  */
 public class AppPolicyManager {
     private SqliteAppConfigStore appConfigStore;
+    private EventBus eventBus;
+    private Context context;
 
-    public AppPolicyManager(SqliteAppConfigStore appConfigStore) {
+    public AppPolicyManager(SqliteAppConfigStore appConfigStore, EventBus eventBus, Context context) {
         this.appConfigStore = appConfigStore;
-        insertDummyConfig();
+        this.eventBus = eventBus;
+        this.context = context;
+        this.eventBus.register(this);
         insertDummyCourse();
     }
 
@@ -42,16 +51,12 @@ public class AppPolicyManager {
                 && CommonUtils.getTimeSinceStartOfDay() < appSessionConfig.getSessionEndTime());
     }
 
-    private void insertDummyConfig() {
-        List<AppSessionConfig> appSessionConfigList = new ArrayList<>();
-        appSessionConfigList.add(new AppSessionConfig(TimeUnit.HOURS.toMillis(15), TimeUnit.HOURS.toMillis(18),
-                TimeUnit.MINUTES.toMillis(1), AppStatus.ALLOWED, "abc"));
-        appConfigStore.insertOrUpdateAppConfig(new AppConfig("com.facebook.katana",
-                appSessionConfigList));
-    }
-
     public LocalCourse getCourse(String courseId) {
         return appConfigStore.getCourse(courseId);
+    }
+
+    public void storeAppConfig(AppConfig appConfig) {
+        appConfigStore.insertOrUpdateAppConfig(appConfig);
     }
 
     private void insertDummyCourse() {
@@ -65,5 +70,10 @@ public class AppPolicyManager {
         String questionText = "dummy question";
         questionDetailsList.add(new QuestionDetails("1", questionText, QuestionType.MCQ, mcqOptionsList, 1));
         appConfigStore.insertOrUpdateCourse(new LocalCourse(courseId, questionDetailsList));
+    }
+
+    @Subscribe
+    public  void onChildRegisteredEvent(ChildRegisteredEvent childRegisteredEvent) {
+        Device.initializeDeviceSyncService(context);
     }
 }

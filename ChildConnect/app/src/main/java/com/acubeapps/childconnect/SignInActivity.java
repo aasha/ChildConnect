@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.acubeapps.childconnect.events.ChildRegisteredEvent;
 import com.acubeapps.childconnect.model.ChildRegisterResponse;
 import com.acubeapps.childconnect.network.NetworkInterface;
 import com.acubeapps.childconnect.network.NetworkResponse;
@@ -23,6 +24,8 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
+
+import org.greenrobot.eventbus.EventBus;
 
 import javax.inject.Inject;
 
@@ -54,6 +57,9 @@ public class SignInActivity extends AppCompatActivity implements
 
     @Inject
     SharedPreferences sharedPreferences;
+
+    @Inject
+    EventBus eventBus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,6 +164,7 @@ public class SignInActivity extends AppCompatActivity implements
                     public void success(ChildRegisterResponse childRegisterResponse, Response response) {
                         hideProgressDialog();
                         sharedPreferences.edit().putString(Constants.CHILD_ID, childRegisterResponse.childId).apply();
+                        eventBus.post(new ChildRegisteredEvent());
                         launchMainActivity();
                         finish();
                     }
@@ -236,7 +243,6 @@ public class SignInActivity extends AppCompatActivity implements
         }
         return true;
     }
-
 
 }
 

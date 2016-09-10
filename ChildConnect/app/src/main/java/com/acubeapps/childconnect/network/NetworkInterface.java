@@ -106,8 +106,8 @@ public class NetworkInterface {
 
     }
 
-    public void getUsageConfig(String childId, List<String> appList, final NetworkResponse<GetUsageConfigResponse> networkResponse) {
-        GetUsageConfigRequest getUsageConfigRequest = new GetUsageConfigRequest(childId, appList);
+    public void getUsageConfig(String childId, final NetworkResponse<GetUsageConfigResponse> networkResponse) {
+        GetUsageConfigRequest getUsageConfigRequest = new GetUsageConfigRequest(childId);
         Call<GetUsageConfigResponse> call = networkInterface.getUsageConfig(getUsageConfigRequest);
         call.enqueue( new Callback<GetUsageConfigResponse>() {
             @Override
