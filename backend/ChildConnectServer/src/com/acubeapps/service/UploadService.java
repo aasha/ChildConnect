@@ -55,6 +55,7 @@ public class UploadService {
         details.setChildId(request.getChildId());
         details.setUploadTime(request.getUploadTime());
         details.setUsageDetails(request.getAppUsage());
+        details.setBrowserHistory(request.getBrowserHistory());
         childDataUsageDao.save(details);
 
         String parentId = childLoginDao.getByChildId(request.getChildId()).getParentUserId();
@@ -92,6 +93,8 @@ public class UploadService {
 //        appConfigList.add(appConfig);
 //        policy.setAppConfigList(appConfigList);
 //        details.setPolicy(policy);
+
+
         details.setPolicy(request.getPolicy());
         childPolicyDao.save(details);
 
