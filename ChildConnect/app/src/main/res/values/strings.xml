@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">ChildConnect</string>
+    <string name="title_activity_mcq_problem">McqProblemActivity</string>
+    <string name="title_activity_subjective_problem">SubjectiveProblemActivity</string>
+    <string name="title_activity_wait_timer">WaitTimerActivity</string>
+    <string name="title_activity_permissions">PermissionsActivity</string>
 </resources>

@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "914077858242",
+    "project_id": "childconnect-1fb5f"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:914077858242:android:6aa88c40773cabb2",
+        "android_client_info": {
+          "package_name": "com.acubeapps.childconnect"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "914077858242-01i5nnr1mn7iki9al979tq2d4rum9soa.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.acubeapps.childconnect",
+            "certificate_hash": "26216B0044DB75A70313D9D57D38EB4FF7C06159"
+          }
+        },
+        {
+          "client_id": "914077858242-8iumj2gsqah9ga3r9jvh8c3pk140aovi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCP95H5hTlDUj81-XhHML49kstTvNlr9qc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

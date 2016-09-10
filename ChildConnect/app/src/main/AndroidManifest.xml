@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.acubeapps.childconnect">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS" tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+
     <application
+        android:name=".MainApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -15,6 +21,39 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name=".service.CoreService"
+            android:enabled="true"
+            android:exported="true" />
+
+        <activity
+            android:name=".task.McqProblemActivity"
+            android:label="@string/title_activity_mcq_problem"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".task.SubjectiveProblemActivity"
+            android:label="@string/title_activity_subjective_problem"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".task.WaitTimerActivity"
+            android:label="@string/title_activity_wait_timer"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <receiver
+            android:name=".EventReceiver"
+            android:enabled="true"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.USER_PRESENT"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name=".PermissionsActivity"
+            android:label="@string/title_activity_permissions"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
