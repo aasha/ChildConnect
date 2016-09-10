@@ -51,6 +51,17 @@ public class AppPolicyManager {
                 && CommonUtils.getTimeSinceStartOfDay() < appSessionConfig.getSessionEndTime());
     }
 
+//<<<<<<< HEAD
+//=======
+//    private void insertDummyConfig() {
+//        List<AppSessionConfig> appSessionConfigList = new ArrayList<>();
+//        appSessionConfigList.add(new AppSessionConfig(TimeUnit.HOURS.toMillis(18), TimeUnit.HOURS.toMillis(22),
+//                TimeUnit.MINUTES.toMillis(1), AppStatus.ALLOWED, "abc"));
+//        appConfigStore.insertOrUpdateAppConfig(new AppConfig("com.facebook.katana",
+//                appSessionConfigList));
+//    }
+//
+//>>>>>>> b55ce2ebbd8f4072677144287d07a3345c48d64c
     public LocalCourse getCourse(String courseId) {
         return appConfigStore.getCourse(courseId);
     }

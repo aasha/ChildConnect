@@ -41,7 +41,7 @@ public class AppModule {
         this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         this.networkInterface = NetworkInterface.getInstance();
         this.sqliteAppConfigStore = new SqliteAppConfigStore(context, 1);
-        appPolicyManager = new AppPolicyManager(sqliteAppConfigStore);
+        appPolicyManager = new AppPolicyManager(sqliteAppConfigStore, eventBus, context);
         appUsageManager = new AppUsageManager(appPolicyManager, context, eventBus, sharedPreferences);
         taskManager = new TaskManager(context, eventBus);
     }
@@ -82,6 +82,12 @@ public class AppModule {
     @Singleton
     public AppUsageManager provideAppUsageManager() {
         return appUsageManager;
+    }
+
+    @Provides
+    @Singleton
+    public AppPolicyManager provideAppPolicyManager() {
+        return appPolicyManager;
     }
 
     @Provides
