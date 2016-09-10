@@ -61,6 +61,7 @@ public class SignInActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_sign_in);
         Injectors.appComponent().injectSignInActivity(this);
         String childId = sharedPreferences.getString(Constants.CHILD_ID, null);
+        Log.e("AASHA", "Child " + childId);
         if (null != childId) {
             launchMainActivity();
             finish();
@@ -156,8 +157,9 @@ public class SignInActivity extends AppCompatActivity implements
                     @Override
                     public void success(ChildRegisterResponse childRegisterResponse, Response response) {
                         hideProgressDialog();
-                        sharedPreferences.edit().putString(Constants.CHILD_ID, childRegisterResponse.childId);
+                        sharedPreferences.edit().putString(Constants.CHILD_ID, childRegisterResponse.childId).apply();
                         launchMainActivity();
+                        finish();
                     }
 
                     @Override

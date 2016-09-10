@@ -45,7 +45,7 @@ public class AppPolicyManager {
     private void insertDummyConfig() {
         List<AppSessionConfig> appSessionConfigList = new ArrayList<>();
         appSessionConfigList.add(new AppSessionConfig(TimeUnit.HOURS.toMillis(15), TimeUnit.HOURS.toMillis(18),
-                TimeUnit.MINUTES.toMillis(2), AppStatus.ALLOWED, "abc"));
+                TimeUnit.MINUTES.toMillis(1), AppStatus.ALLOWED, "abc"));
         appConfigStore.insertOrUpdateAppConfig(new AppConfig("com.facebook.katana",
                 appSessionConfigList));
     }
