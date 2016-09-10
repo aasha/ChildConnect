@@ -56,6 +56,7 @@ public class ChildLoginDetails {
         this.source = source;
     }
 
+    @DynamoDBIndexHashKey(attributeName = "parentUserId", globalSecondaryIndexName = "parentUserId-index")
     public String getParentUserId() {
         return parentUserId;
     }
