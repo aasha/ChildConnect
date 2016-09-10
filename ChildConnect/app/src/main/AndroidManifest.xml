@@ -4,8 +4,10 @@
     package="com.acubeapps.childconnect">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS" tools:ignore="ProtectedPermissions" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission
+        android:name="android.permission.PACKAGE_USAGE_STATS"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:name=".MainApplication"
@@ -28,14 +30,6 @@
             android:exported="true" />
 
         <activity
-            android:name=".task.McqProblemActivity"
-            android:label="@string/title_activity_mcq_problem"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".task.SubjectiveProblemActivity"
-            android:label="@string/title_activity_subjective_problem"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".task.WaitTimerActivity"
             android:label="@string/title_activity_wait_timer"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -43,17 +37,18 @@
         <receiver
             android:name=".EventReceiver"
             android:enabled="true"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.USER_PRESENT"/>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.USER_PRESENT" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
 
         <activity
             android:name=".PermissionsActivity"
             android:label="@string/title_activity_permissions"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".task.ProblemActivity"></activity>
     </application>
 
 </manifest>

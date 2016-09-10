@@ -11,6 +11,7 @@ import com.acubeapps.childconnect.helpers.AppPolicyManager;
 import com.acubeapps.childconnect.helpers.AppUsageManager;
 import com.acubeapps.childconnect.network.NetworkInterface;
 import com.acubeapps.childconnect.store.SqliteAppConfigStore;
+import com.acubeapps.childconnect.task.TaskManager;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -31,6 +32,7 @@ public class AppModule {
     private SqliteAppConfigStore sqliteAppConfigStore;
     private AppPolicyManager appPolicyManager;
     private AppUsageManager appUsageManager;
+    private TaskManager taskManager;
 
     public AppModule(Application context) {
         this.context = context;
@@ -41,6 +43,7 @@ public class AppModule {
         this.sqliteAppConfigStore = new SqliteAppConfigStore(context, 1);
         appPolicyManager = new AppPolicyManager(sqliteAppConfigStore);
         appUsageManager = new AppUsageManager(appPolicyManager, context, eventBus);
+        taskManager = new TaskManager(context, eventBus);
     }
 
 
@@ -79,5 +82,11 @@ public class AppModule {
     @Singleton
     public AppUsageManager provideAppUsageManager() {
         return appUsageManager;
+    }
+
+    @Provides
+    @Singleton
+    public TaskManager provideTaskManager() {
+        return taskManager;
     }
 }
