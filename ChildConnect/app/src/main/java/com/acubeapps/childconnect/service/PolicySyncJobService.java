@@ -10,6 +10,7 @@ import com.acubeapps.childconnect.Injectors;
 import com.acubeapps.childconnect.helpers.AppPolicyManager;
 import com.acubeapps.childconnect.model.AppConfig;
 import com.acubeapps.childconnect.model.GetUsageConfigResponse;
+import com.acubeapps.childconnect.model.Policy;
 import com.acubeapps.childconnect.network.NetworkInterface;
 import com.acubeapps.childconnect.network.NetworkResponse;
 
@@ -45,7 +46,10 @@ public class PolicySyncJobService extends JobService {
         networkInterface.getUsageConfig(childId, new NetworkResponse<GetUsageConfigResponse>() {
             @Override
             public void success(GetUsageConfigResponse getUsageConfigResponse, Response response) {
-                List<AppConfig> appConfigList = getUsageConfigResponse.appConfigList;
+                Policy policy = getUsageConfigResponse.policy;
+                String courseId = policy.courseId;
+                preferences.edit().putString(Constants.COURSE_ID, courseId).apply();
+                List<AppConfig> appConfigList = policy.appConfigList;
                 for (AppConfig appConfig : appConfigList) {
                     appPolicyManager.storeAppConfig(appConfig);
                 }

@@ -5,18 +5,13 @@ package com.acubeapps.childconnect.events;
  */
 public class ShowTaskScreenEvent {
     private String packageName;
-    private String courseId;
 
-    public ShowTaskScreenEvent(String packageName, String courseId) {
+    public ShowTaskScreenEvent(String packageName) {
         this.packageName = packageName;
-        this.courseId = courseId;
     }
 
     public String getPackageName() {
         return packageName;
     }
 
-    public String getCourseId() {
-        return courseId;
-    }
 }

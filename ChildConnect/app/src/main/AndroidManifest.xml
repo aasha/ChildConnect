@@ -7,7 +7,11 @@
     <uses-permission
         android:name="android.permission.PACKAGE_USAGE_STATS"
         tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <permission android:name="com.acubeapps.childconnect.permission.C2D_MESSAGE" android:protectionLevel="signature" />
+    <uses-permission android:name="com.acubeapps.childconnect.permission.C2D_MESSAGE"/>
+
 
     <application
         android:name=".MainApplication"
@@ -24,10 +28,21 @@
             </intent-filter>
         </activity>
 
-        <service
-            android:name=".service.CoreService"
+        <service android:name=".service.CoreService"
             android:enabled="true"
             android:exported="true" />
+
+        <service android:name=".service.DeviceSyncService"
+            android:enabled="true"
+            android:exported="true" />
+
+        <service android:name=".service.PolicySyncJobService"
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            android:enabled="true" />
+
+        <service android:name=".service.UploadSyncJobService"
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            android:enabled="true" />
 
         <activity
             android:name=".task.WaitTimerActivity"
@@ -50,6 +65,35 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".task.ProblemActivity"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+
+        <receiver
+            android:name=".gcm.GcmReceiver"
+            android:exported="true"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <category android:name="com.example.gcm" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name=".gcm.MyGcmListenerService"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".gcm.MyInstanceIdListenerService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.android.gms.iid.InstanceID" />
+            </intent-filter>
+        </service>
+
+        <service android:name=".gcm.RegistrationIntentService"
+            android:enabled="true" />
     </application>
 
 </manifest>

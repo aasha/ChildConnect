@@ -3,6 +3,7 @@ package com.acubeapps.childconnect.network;
 import com.acubeapps.childconnect.model.BaseResponse;
 import com.acubeapps.childconnect.model.ChildRegisterRequest;
 import com.acubeapps.childconnect.model.ChildRegisterResponse;
+import com.acubeapps.childconnect.model.GcmRegisterRequest;
 import com.acubeapps.childconnect.model.GetAllCoursesRequest;
 import com.acubeapps.childconnect.model.GetAllCoursesResponse;
 import com.acubeapps.childconnect.model.GetCourseDetailsRequest;
@@ -32,7 +33,7 @@ public interface ApiInterface {
     @POST("ChildConnectServer/upload/childDataUsage")
     Call<BaseResponse> sendCollectedData(@Body SendCollectedDataRequest req);
 
-    @POST("ChildConnectServer/getUsageConfig")
+    @POST("ChildConnectServer/download/childPolicy")
     Call<GetUsageConfigResponse> getUsageConfig(@Body GetUsageConfigRequest req);
 
     @POST("ChildConnectServer/getAllCourses")
@@ -43,4 +44,7 @@ public interface ApiInterface {
 
     @POST("ChildConnectServer/getSolution")
     Call<GetSolutionResponse> getSolution(@Body GetSolutionRequest req);
+
+    @POST("ChildConnectServer/login/childGcm")
+    Call<BaseResponse> submitGcmToken(@Body GcmRegisterRequest req);
 }

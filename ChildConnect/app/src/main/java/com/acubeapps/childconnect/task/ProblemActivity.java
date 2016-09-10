@@ -54,7 +54,7 @@ public class ProblemActivity extends AppCompatActivity implements McqFragment.On
         setContentView(R.layout.activity_problem);
         Injectors.appComponent().injectProblemActivity(this);
         ButterKnife.bind(this);
-        String courseId = getIntent().getStringExtra(Constants.COURSE_ID);
+        String courseId = preferences.getString(Constants.COURSE_ID, null);
         packageName = getIntent().getStringExtra(Constants.PACKAGE_NAME);
         currentQuestionId = preferences.getInt(Constants.QUESTION_ID, 0);
         questionDetailsList = getAllQuestions(courseId);

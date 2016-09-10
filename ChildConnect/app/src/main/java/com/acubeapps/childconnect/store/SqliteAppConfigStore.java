@@ -89,9 +89,8 @@ public class SqliteAppConfigStore extends SQLiteOpenHelper {
                 long sessionAllowedDuration = cursor.getLong(cursor.getColumnIndex(SESSION_ALLOWED_DURATION));
                 int sessionStatus = cursor.getInt(cursor.getColumnIndex(SESSION_STATUS));
                 AppStatus appStatus = sessionStatus > 0 ? AppStatus.ALLOWED : AppStatus.BLOCKED;
-                String taskId = cursor.getString(cursor.getColumnIndex(SESSION_TASK_ID));
                 appSessionConfigList.add(new AppSessionConfig(sessionStartTime, sessionEndTime,
-                        sessionAllowedDuration, appStatus, taskId));
+                        sessionAllowedDuration, appStatus));
             } while (cursor.moveToNext());
         }
         AppConfig appConfig = new AppConfig(packageName, appSessionConfigList);
@@ -110,7 +109,6 @@ public class SqliteAppConfigStore extends SQLiteOpenHelper {
             contentValues.put(SESSION_END_TIME, appSessionConfig.getSessionEndTime());
             contentValues.put(SESSION_ALLOWED_DURATION, appSessionConfig.getSessionAllowedDuration());
             contentValues.put(SESSION_STATUS, (appSessionConfig.getStatus().equals(AppStatus.ALLOWED) ? 1 : -1));
-            contentValues.put(SESSION_TASK_ID, appSessionConfig.getTaskId());
             db.insert(APPCONFIGTABLE, null, contentValues);
         }
     }

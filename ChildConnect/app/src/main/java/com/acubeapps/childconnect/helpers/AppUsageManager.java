@@ -42,7 +42,7 @@ public class AppUsageManager {
         }
         if (sessionConfig.getStatus().equals(AppStatus.BLOCKED)) {
             Log.d(Constants.LOG_TAG, "app is blocked - " + packageName);
-            eventBus.post(new ShowTaskScreenEvent(packageName, null));
+            eventBus.post(new ShowTaskScreenEvent(packageName));
         } else {
             long startTime = CommonUtils.getStartOfTheDayTime() + sessionConfig.getSessionStartTime();
             long lastTimeStamp = preferences.getLong(packageName, 0);
@@ -52,7 +52,7 @@ public class AppUsageManager {
             Log.d(Constants.LOG_TAG, "computed usage - " + sessionUsage);
             Log.d(Constants.LOG_TAG, "allowed appUsage - " + sessionConfig.getSessionAllowedDuration());
             if (sessionUsage > sessionConfig.getSessionAllowedDuration()) {
-                eventBus.post(new ShowTaskScreenEvent(packageName, sessionConfig.getTaskId()));
+                eventBus.post(new ShowTaskScreenEvent(packageName));
             }
         }
     }

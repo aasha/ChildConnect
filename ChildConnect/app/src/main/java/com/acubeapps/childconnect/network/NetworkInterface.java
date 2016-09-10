@@ -7,6 +7,7 @@ import com.acubeapps.childconnect.model.AppUsage;
 import com.acubeapps.childconnect.model.BaseResponse;
 import com.acubeapps.childconnect.model.ChildRegisterRequest;
 import com.acubeapps.childconnect.model.ChildRegisterResponse;
+import com.acubeapps.childconnect.model.GcmRegisterRequest;
 import com.acubeapps.childconnect.model.GetAllCoursesRequest;
 import com.acubeapps.childconnect.model.GetAllCoursesResponse;
 import com.acubeapps.childconnect.model.GetCourseDetailsRequest;
@@ -15,6 +16,7 @@ import com.acubeapps.childconnect.model.GetSolutionRequest;
 import com.acubeapps.childconnect.model.GetSolutionResponse;
 import com.acubeapps.childconnect.model.GetUsageConfigRequest;
 import com.acubeapps.childconnect.model.GetUsageConfigResponse;
+import com.acubeapps.childconnect.model.LocalCourse;
 import com.acubeapps.childconnect.model.ParentRegisterRequest;
 import com.acubeapps.childconnect.model.RegisterResponse;
 import com.acubeapps.childconnect.model.SendCollectedDataRequest;
@@ -38,6 +40,31 @@ public class NetworkInterface {
         return new NetworkInterface();
     }
 
+    public void registerGcm(final String email, final String gcmToken, final NetworkResponse<BaseResponse> networkResponse) {
+        final GcmRegisterRequest gcmRegisterRequest = new GcmRegisterRequest(email, gcmToken);
+        Call<BaseResponse> call = networkInterface.submitGcmToken(gcmRegisterRequest);
+        call.enqueue(new Callback<BaseResponse>() {
+            @Override
+            public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
+                Log.d("Ajitesh", response.raw().toString());
+                Log.d("Ajitesh", response.message());
+                Log.d("Ajitesh", "email - " + email);
+                Log.d("Ajitesh", "gcmtoken - " + gcmToken);
+                BaseResponse responseBody = response.body();
+                if (responseBody.status.equalsIgnoreCase(Constants.SUCCESS)) {
+                    networkResponse.success(responseBody, response);
+                } else {
+                    networkResponse.failure(responseBody);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseResponse> call, Throwable t) {
+                networkResponse.networkFailure(t);
+            }
+        });
+    }
+
     public void register(String name, String email, String password, final NetworkResponse<RegisterResponse> networkResponse) {
         ParentRegisterRequest parentRegisterRequest = new ParentRegisterRequest(name, email,
                 password);
@@ -46,7 +73,7 @@ public class NetworkInterface {
             @Override
             public void onResponse(Call<RegisterResponse> call, Response<RegisterResponse> response) {
                 RegisterResponse responseBody = response.body();
-                if (responseBody.status.equals(Constants.SUCCESS)) {
+                if (responseBody.status.equalsIgnoreCase(Constants.SUCCESS)) {
                     networkResponse.success(responseBody, response);
                 } else {
                     networkResponse.failure(responseBody);
@@ -83,15 +110,15 @@ public class NetworkInterface {
         });
     }
 
-    public void sendCollectedData(String childId, List<AppUsage> appUsage, List<String> browserHistory, final NetworkResponse<BaseResponse> networkResponse) {
-        SendCollectedDataRequest sendCollectedDataRequest = new SendCollectedDataRequest(childId, appUsage,
+    public void sendCollectedData(String childId, String uploadTime, List<AppUsage> appUsage, List<String> browserHistory, final NetworkResponse<BaseResponse> networkResponse) {
+        SendCollectedDataRequest sendCollectedDataRequest = new SendCollectedDataRequest(childId, uploadTime, appUsage,
                 browserHistory);
         Call<BaseResponse> call = networkInterface.sendCollectedData(sendCollectedDataRequest);
         call.enqueue(new Callback<BaseResponse>() {
             @Override
             public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
                 BaseResponse responseBody = response.body();
-                if (responseBody.status.equals(Constants.SUCCESS)) {
+                if (responseBody.status.equalsIgnoreCase(Constants.SUCCESS)) {
                     networkResponse.success(responseBody, response);
                 } else {
                     networkResponse.failure(responseBody);
@@ -113,7 +140,7 @@ public class NetworkInterface {
             @Override
             public void onResponse(Call<GetUsageConfigResponse> call, Response<GetUsageConfigResponse> response) {
                 GetUsageConfigResponse responseBody = response.body();
-                if (responseBody.status.equals(Constants.SUCCESS)) {
+                if (responseBody.status.equalsIgnoreCase(Constants.SUCCESS)) {
                     networkResponse.success(responseBody, response);
                 } else {
                     networkResponse.failure(responseBody);
@@ -134,7 +161,7 @@ public class NetworkInterface {
             @Override
             public void onResponse(Call<GetAllCoursesResponse> call, Response<GetAllCoursesResponse> response) {
                 GetAllCoursesResponse responseBody = response.body();
-                if (responseBody.status.equals(Constants.SUCCESS)) {
+                if (responseBody.status.equalsIgnoreCase(Constants.SUCCESS)) {
                     networkResponse.success(responseBody, response);
                 } else {
                     networkResponse.failure(responseBody);
@@ -155,7 +182,7 @@ public class NetworkInterface {
             @Override
             public void onResponse(Call<GetCourseDetailsResponse> call, Response<GetCourseDetailsResponse> response) {
                 GetCourseDetailsResponse responseBody = response.body();
-                if (responseBody.status.equals(Constants.SUCCESS)) {
+                if (responseBody.status.equalsIgnoreCase(Constants.SUCCESS)) {
                     networkResponse.success(responseBody, response);
                 } else {
                     networkResponse.failure(responseBody);
@@ -177,7 +204,7 @@ public class NetworkInterface {
             @Override
             public void onResponse(Call<GetSolutionResponse> call, Response<GetSolutionResponse> response) {
                 GetSolutionResponse responseBody = response.body();
-                if (responseBody.status.equals(Constants.SUCCESS)) {
+                if (responseBody.status.equalsIgnoreCase(Constants.SUCCESS)) {
                     networkResponse.success(responseBody, response);
                 } else {
                     networkResponse.failure(responseBody);

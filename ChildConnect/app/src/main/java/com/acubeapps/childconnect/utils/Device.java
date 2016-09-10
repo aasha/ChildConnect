@@ -5,14 +5,29 @@ import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
+import com.acubeapps.childconnect.Constants;
+import com.acubeapps.childconnect.gcm.RegistrationIntentService;
 import com.acubeapps.childconnect.model.AppUsage;
 import com.acubeapps.childconnect.service.CoreService;
 import com.acubeapps.childconnect.service.DeviceSyncService;
+import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.mobileconnectors.s3.transfermanager.TransferManager;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
+import com.amazonaws.regions.Regions;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.Region;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -103,16 +118,52 @@ public class Device {
         return appUsageList;
     }
 
-    public static void initializeService(Context context) {
+    public static void initializeService(Context context, SharedPreferences preferences) {
         Intent serviceIntent = new Intent(context, CoreService.class);
         context.startService(serviceIntent);
 
         Intent syncServiceIntent = new Intent(context, DeviceSyncService.class);
         context.startService(syncServiceIntent);
+
+        String registrationId = preferences.getString(Constants.GCM_REGISTRATION_ID, null);
+        boolean isRegisteredWithServer = preferences.getBoolean(Constants.GCM_SERVER_SYNC_DONE, false);
+        if (!isRegisteredWithServer || registrationId == null) {
+            Intent gcmRegisterIntent = new Intent(context, RegistrationIntentService.class);
+            context.startService(gcmRegisterIntent);
+        }
     }
 
     public static void initializeDeviceSyncService(Context context) {
         Intent syncServiceIntent = new Intent(context, DeviceSyncService.class);
         context.startService(syncServiceIntent);
+    }
+
+    public static String uploadImageToServer(Context context, File file) {
+        AWSCredentials credentials = new BasicAWSCredentials(Constants.MY_ACCESS_KEY_ID, Constants.MY_SECRET_KEY);
+        AmazonS3 s3 = new AmazonS3Client(credentials);
+        s3.setEndpoint("https://s3-ap-southeast-1.amazonaws.com/");
+        TransferUtility transferUtility = new TransferUtility(s3, context);
+        TransferObserver observer = transferUtility.upload(Constants.MY_BUCKET, file.getName(), file);
+        observer.setTransferListener(new TransferListener() {
+            @Override
+            public void onStateChanged(int i, TransferState transferState) {
+                if (transferState.equals(TransferState.COMPLETED)) {
+
+                }
+            }
+
+            @Override
+            public void onProgressChanged(int i, long l, long l1) {
+
+            }
+
+            @Override
+            public void onError(int i, Exception e) {
+
+            }
+        });
+
+        String path = "https://" + Constants.MY_BUCKET + ".s3.amazonaws.com/" + file.getName();
+        return path;
     }
 }
