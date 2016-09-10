@@ -3,6 +3,8 @@ package com.acubeapps.parentconsole.network;
 import com.acubeapps.parentconsole.Constants;
 import com.acubeapps.parentconsole.model.GetAllCoursesRequest;
 import com.acubeapps.parentconsole.model.GetAllCoursesResponse;
+import com.acubeapps.parentconsole.model.GetChildListRequest;
+import com.acubeapps.parentconsole.model.GetChildListResponse;
 import com.acubeapps.parentconsole.model.GetCourseDetailsRequest;
 import com.acubeapps.parentconsole.model.GetCourseDetailsResponse;
 import com.acubeapps.parentconsole.model.GetSolutionRequest;
@@ -35,7 +37,7 @@ public class NetworkInterface {
             @Override
             public void onResponse(Call<ParentRegisterResponse> call, Response<ParentRegisterResponse> response) {
                 ParentRegisterResponse responseBody = response.body();
-                if (responseBody.status.equals(Constants.SUCCESS)) {
+                if (responseBody.status.equalsIgnoreCase(Constants.SUCCESS)) {
                     networkResponse.success(responseBody, response);
                 } else {
                     networkResponse.failure(responseBody);
@@ -44,6 +46,27 @@ public class NetworkInterface {
 
             @Override
             public void onFailure(Call<ParentRegisterResponse> call, Throwable t) {
+                networkResponse.networkFailure(t);
+            }
+        });
+    }
+
+    public void getChildList(String parentId, final NetworkResponse<GetChildListResponse> networkResponse) {
+        GetChildListRequest getChildListRequest = new GetChildListRequest(parentId);
+        Call<GetChildListResponse> call = networkInterface.getChildList(getChildListRequest);
+        call.enqueue(new Callback<GetChildListResponse>() {
+            @Override
+            public void onResponse(Call<GetChildListResponse> call, Response<GetChildListResponse> response) {
+                GetChildListResponse responseBody = response.body();
+                if (responseBody.status.equalsIgnoreCase(Constants.SUCCESS)) {
+                    networkResponse.success(responseBody, response);
+                } else {
+                    networkResponse.failure(responseBody);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetChildListResponse> call, Throwable t) {
                 networkResponse.networkFailure(t);
             }
         });

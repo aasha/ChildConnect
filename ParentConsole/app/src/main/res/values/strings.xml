@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">ParentConsole</string>
+    <string name="title_activity_child_list">ChildListActivity</string>
 </resources>

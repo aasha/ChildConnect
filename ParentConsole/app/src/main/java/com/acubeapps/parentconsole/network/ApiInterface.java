@@ -2,6 +2,10 @@ package com.acubeapps.parentconsole.network;
 
 import com.acubeapps.parentconsole.model.GetAllCoursesRequest;
 import com.acubeapps.parentconsole.model.GetAllCoursesResponse;
+import com.acubeapps.parentconsole.model.GetChildListRequest;
+import com.acubeapps.parentconsole.model.GetChildListResponse;
+import com.acubeapps.parentconsole.model.GetChildUsageRequest;
+import com.acubeapps.parentconsole.model.GetChildUsageResponse;
 import com.acubeapps.parentconsole.model.GetCourseDetailsRequest;
 import com.acubeapps.parentconsole.model.GetCourseDetailsResponse;
 import com.acubeapps.parentconsole.model.GetSolutionRequest;
@@ -19,6 +23,18 @@ import retrofit2.http.POST;
 public interface ApiInterface {
     @POST("ChildConnectServer/login/parent")
     Call<ParentRegisterResponse> register(@Body ParentRegisterRequest req);
+
+    @POST("ChildConnectServer/download/childList")
+    Call<GetChildListResponse> getChildList(@Body GetChildListRequest req);
+
+    @POST("ChildConnectServer/download/childDataUsage")
+    Call<GetChildUsageResponse> getChildUsageList(@Body GetChildUsageRequest req);
+
+    @POST("ChildConnectServer/download/childPolicy")
+    Call<GetChildListResponse> getChildUsagePolicy(@Body GetChildListRequest req);
+
+    @POST("ChildConnectServer/download/childList")
+    Call<GetChildListResponse> getChildList(@Body GetChildListRequest req);
 
     @POST("ChildConnectServer/getAllCourses")
     Call<GetAllCoursesResponse> getAllCourses(@Body GetAllCoursesRequest req);

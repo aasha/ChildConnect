@@ -1,0 +1,9 @@
+package com.acubeapps.parentconsole.model;
+
+/**
+ * Created by aasha.medhi on 9/11/16.
+ */
+public class GetChildUsageRequest {
+    public String childId;
+    public String uploadTime;
+}

@@ -13,37 +13,57 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/txt_email"
-        android:text="Email"
+        android:id="@+id/txt_name"
+        android:text="Name"
         android:textSize="18sp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="10dp"
         android:layout_marginRight="40dp"/>
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/edit_name"
+        android:layout_marginBottom="10dp"
+        android:layout_toRightOf="@+id/txt_name"/>
+
+    <TextView
+        android:layout_below="@+id/edit_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txt_email"
+        android:text="Email"
+        android:textSize="18sp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="40dp"/>
+
+    <EditText
+        android:layout_below="@+id/edit_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/edit_email"
+        android:layout_marginBottom="10dp"
         android:layout_toRightOf="@+id/txt_email"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/txt_Password"
-        android:layout_below="@+id/txt_email"
+        android:layout_below="@+id/edit_email"
         android:text="Password"
         android:textSize="18sp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="10dp"
         android:layout_marginRight="10dp"/>
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/txt_email"
+        android:layout_below="@+id/edit_email"
         android:id="@+id/edit_password"
         android:inputType="textPassword"
         android:layout_toRightOf="@+id/txt_email"/>
 
     <Button
+        android:id="@+id/btn_register"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Register"
