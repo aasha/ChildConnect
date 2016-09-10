@@ -10,5 +10,6 @@ public class Constants {
     public static final String SUCCESS = "SUCCESS";
     public static final String FAILURE = "FAILURE";
     public static final String COURSE_ID = "COURSE_ID";
+    public static final String QUESTION_ID = "QUESTION_ID";
     public static final String SOURCE_GOOGLE = "Google";
 }

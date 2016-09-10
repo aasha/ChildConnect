@@ -33,5 +33,4 @@ public class McqOptions implements Serializable {
     public void setOptionText(String optionText) {
         this.optionText = optionText;
     }
-
 }

@@ -7,7 +7,6 @@ import java.util.List;
  * Created by aasha.medhi on 9/10/16.
  */
 public class QuestionDetails implements Serializable{
-
     public String questionId;
     public String questionText;
     public QuestionType questionType;
