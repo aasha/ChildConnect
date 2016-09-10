@@ -1,6 +1,5 @@
 package com.acubeapps.childconnect.task;
 
-import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
@@ -10,9 +9,12 @@ import android.util.Log;
 import com.acubeapps.childconnect.Constants;
 import com.acubeapps.childconnect.Injectors;
 import com.acubeapps.childconnect.R;
+import com.acubeapps.childconnect.events.CourseClearedEvent;
 import com.acubeapps.childconnect.model.McqOptions;
 import com.acubeapps.childconnect.model.QuestionDetails;
 import com.acubeapps.childconnect.model.QuestionType;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +24,8 @@ import javax.inject.Inject;
 public class ProblemActivity extends AppCompatActivity implements McqFragment.OnMcqFragmentInteractionListener{
     private int currentQuestionId = 0;
     private int maxQuestionId = 5;
+
+    String packageName;
     List<QuestionDetails> questionDetailsList;
 
     McqFragment mcqFragment;
@@ -30,15 +34,19 @@ public class ProblemActivity extends AppCompatActivity implements McqFragment.On
     @Inject
     SharedPreferences preferences;
 
+    @Inject
+    EventBus eventBus;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_problem);
         Injectors.appComponent().injectProblemActivity(this);
         String courseId = getIntent().getStringExtra(Constants.COURSE_ID);
+        packageName = getIntent().getStringExtra(Constants.PACKAGE_NAME);
         currentQuestionId = preferences.getInt(Constants.QUESTION_ID, 0);
         questionDetailsList = getAllQuestions(courseId);
-        if (questionDetailsList.size() >= currentQuestionId) {
+        if (currentQuestionId >= questionDetailsList.size()) {
             currentQuestionId = 0;
         }
         maxQuestionId = currentQuestionId + 5;
@@ -47,8 +55,6 @@ public class ProblemActivity extends AppCompatActivity implements McqFragment.On
         }
         preferences.edit().putInt(Constants.QUESTION_ID, currentQuestionId).apply();
         QuestionDetails questionDetails = questionDetailsList.get(currentQuestionId);
-        Log.e("AASHA", "create  Current q " + currentQuestionId);
-        Log.e("AASHA", "create Current q "  + maxQuestionId);
         showQuestion(questionDetails);
     }
 
@@ -73,39 +79,42 @@ public class ProblemActivity extends AppCompatActivity implements McqFragment.On
     @Override
     public void onSuccessfulAttempt() {
         currentQuestionId++;
-        Log.e("AASHA", "suc  Current q " + currentQuestionId);
-        Log.e("AASHA", "succ Current q "  + maxQuestionId);
         preferences.edit().putInt(Constants.QUESTION_ID, currentQuestionId).apply();
         if (currentQuestionId < maxQuestionId) {
             showQuestion(questionDetailsList.get(currentQuestionId));
+        } else {
+            eventBus.post(new CourseClearedEvent(packageName, System.currentTimeMillis()));
+            finish();
         }
     }
 
     @Override
     public void onFailedAttempt() {
         currentQuestionId++;
-        Log.e("AASHA", "failed  Current q " + currentQuestionId);
-        Log.e("AASHA", "failed Current q "  + maxQuestionId);
         preferences.edit().putInt(Constants.QUESTION_ID, currentQuestionId).apply();
         if (currentQuestionId < maxQuestionId) {
             showQuestion(questionDetailsList.get(currentQuestionId));
+        } else {
+            eventBus.post(new CourseClearedEvent(packageName, System.currentTimeMillis()));
+            finish();
         }
     }
 
     private void showQuestion(QuestionDetails questionDetails) {
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         if (null != mcqFragment) {
-            ft.remove(mcqFragment).commit();
+            ft.remove(mcqFragment);
         }
         if (null != subjectiveFragment) {
-            ft.remove(subjectiveFragment).commit();
+            ft.remove(subjectiveFragment);
         }
         if (questionDetails.questionType == QuestionType.MCQ.name()) {
-            McqFragment mcqFragment = McqFragment.newInstance(questionDetails);
-            ft.add(R.id.activity_problem, mcqFragment, "MCQ").commit();
+            mcqFragment = McqFragment.newInstance(questionDetails);
+            ft.add(R.id.activity_problem, mcqFragment, "MCQ");
         } else {
 //            SubjectiveFragment subjectiveFragment = SubjectiveFragment.newInstance(questionDetails);
 //            FragmentTransaction ft = getFragmentManager().beginTransaction();
         }
+        ft.commit();
     }
 }

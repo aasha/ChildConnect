@@ -33,6 +33,7 @@ public class TaskManager {
         } else {
             intent = new Intent(context, ProblemActivity.class);
             intent.putExtra(Constants.COURSE_ID, event.getCourseId());
+            intent.putExtra(Constants.PACKAGE_NAME, event.getPackageName());
         }
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
