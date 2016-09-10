@@ -7,10 +7,8 @@ import java.util.List;
  */
 public class GetUsageConfigRequest {
     public String childId;
-    public List<String> appList;
 
-    public GetUsageConfigRequest(String childId, List<String> appList) {
+    public GetUsageConfigRequest(String childId) {
         this.childId = childId;
-        this.appList = appList;
     }
 }

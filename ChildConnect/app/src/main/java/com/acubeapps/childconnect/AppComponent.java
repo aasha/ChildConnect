@@ -1,6 +1,8 @@
 package com.acubeapps.childconnect;
 
 import com.acubeapps.childconnect.service.CoreService;
+import com.acubeapps.childconnect.service.PolicySyncJobService;
+import com.acubeapps.childconnect.service.UploadSyncJobService;
 import com.acubeapps.childconnect.task.ProblemActivity;
 
 import javax.inject.Singleton;
@@ -21,5 +23,9 @@ public interface AppComponent {
     void injectProblemActivity(ProblemActivity activity);
 
     void injectCoreService(CoreService coreService);
+
+    void injectUploadSyncJobService(UploadSyncJobService uploadSyncJobService);
+
+    void injectPolicySyncJobService(PolicySyncJobService policySyncJobService);
 
 }

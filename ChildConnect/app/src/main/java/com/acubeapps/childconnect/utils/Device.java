@@ -1,6 +1,7 @@
 package com.acubeapps.childconnect.utils;
 
 import android.app.usage.UsageEvents;
+import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
 import android.content.Context;
 import android.content.Intent;
@@ -8,7 +9,9 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
+import com.acubeapps.childconnect.model.AppUsage;
 import com.acubeapps.childconnect.service.CoreService;
+import com.acubeapps.childconnect.service.DeviceSyncService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,10 +84,35 @@ public class Device {
         return timeInForeground;
     }
 
+    public static List<AppUsage> getAppUsage(Context context, long startTime, long endTime) {
+        UsageStatsManager usageStatsManager = (UsageStatsManager) context.getSystemService(Context.USAGE_STATS_SERVICE);
+        PackageManager packageManager = context.getPackageManager();
+        List<UsageStats> usageStatsList = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY,
+                startTime, endTime);
+        List<AppUsage> appUsageList = new ArrayList<>();
+        for (UsageStats usageStats : usageStatsList) {
+            String appName = usageStats.getPackageName();
+            String appDisplayName = "";
+            try {
+                appDisplayName = (packageManager.getApplicationLabel(packageManager.getApplicationInfo(appName, 0))).toString();
+            } catch (Exception e) {
 
+            }
+            appUsageList.add(new AppUsage(appName, appDisplayName, null, usageStats.getTotalTimeInForeground()));
+        }
+        return appUsageList;
+    }
 
     public static void initializeService(Context context) {
         Intent serviceIntent = new Intent(context, CoreService.class);
         context.startService(serviceIntent);
+
+        Intent syncServiceIntent = new Intent(context, DeviceSyncService.class);
+        context.startService(syncServiceIntent);
+    }
+
+    public static void initializeDeviceSyncService(Context context) {
+        Intent syncServiceIntent = new Intent(context, DeviceSyncService.class);
+        context.startService(syncServiceIntent);
     }
 }
