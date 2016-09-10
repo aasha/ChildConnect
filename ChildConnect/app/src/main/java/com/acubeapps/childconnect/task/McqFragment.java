@@ -43,7 +43,7 @@ public class McqFragment extends Fragment {
     public static McqFragment newInstance(QuestionDetails questionDetails) {
         McqFragment fragment = new McqFragment();
         Bundle args = new Bundle();
-        args.putParcelable(QUESTION_DETAILS, questionDetails);
+        args.putSerializable(QUESTION_DETAILS, questionDetails);
         fragment.setArguments(args);
         return fragment;
     }
@@ -52,7 +52,7 @@ public class McqFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            questionDetails = getArguments().getParcelable(QUESTION_DETAILS);
+            questionDetails = (QuestionDetails) (getArguments().getSerializable(QUESTION_DETAILS));
         }
     }
 

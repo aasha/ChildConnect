@@ -1,12 +1,12 @@
 package com.acubeapps.childconnect.model;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import java.io.Serializable;
 
 /**
  * Created by aasha.medhi on 9/10/16.
  */
-public class McqOptions implements Parcelable{
+public class McqOptions implements Serializable {
+
     public int optionSeq;
     public String optionText;
 
@@ -15,31 +15,22 @@ public class McqOptions implements Parcelable{
         this.optionText = optionText;
     }
 
-    protected McqOptions(Parcel in) {
-        optionSeq = in.readInt();
-        optionText = in.readString();
+    public McqOptions() {
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(optionSeq);
-        dest.writeString(optionText);
+    public int getOptionSeq() {
+        return optionSeq;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
+    public void setOptionSeq(int optionSeq) {
+        this.optionSeq = optionSeq;
     }
 
-    public static final Creator<McqOptions> CREATOR = new Creator<McqOptions>() {
-        @Override
-        public McqOptions createFromParcel(Parcel in) {
-            return new McqOptions(in);
-        }
+    public String getOptionText() {
+        return optionText;
+    }
 
-        @Override
-        public McqOptions[] newArray(int size) {
-            return new McqOptions[size];
-        }
-    };
+    public void setOptionText(String optionText) {
+        this.optionText = optionText;
+    }
 }

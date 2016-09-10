@@ -3,6 +3,10 @@ package com.acubeapps.childconnect.helpers;
 import com.acubeapps.childconnect.model.AppConfig;
 import com.acubeapps.childconnect.model.AppSessionConfig;
 import com.acubeapps.childconnect.model.AppStatus;
+import com.acubeapps.childconnect.model.LocalCourse;
+import com.acubeapps.childconnect.model.McqOptions;
+import com.acubeapps.childconnect.model.QuestionDetails;
+import com.acubeapps.childconnect.model.QuestionType;
 import com.acubeapps.childconnect.store.SqliteAppConfigStore;
 import com.acubeapps.childconnect.utils.CommonUtils;
 
@@ -19,6 +23,7 @@ public class AppPolicyManager {
     public AppPolicyManager(SqliteAppConfigStore appConfigStore) {
         this.appConfigStore = appConfigStore;
         insertDummyConfig();
+        insertDummyCourse();
     }
 
     public AppSessionConfig getActiveAppPolicy(String packageName) {
@@ -40,8 +45,25 @@ public class AppPolicyManager {
     private void insertDummyConfig() {
         List<AppSessionConfig> appSessionConfigList = new ArrayList<>();
         appSessionConfigList.add(new AppSessionConfig(TimeUnit.HOURS.toMillis(14), TimeUnit.HOURS.toMillis(15),
-                TimeUnit.MINUTES.toMillis(5), AppStatus.ALLOWED, "abc"));
+                TimeUnit.MINUTES.toMillis(2), AppStatus.ALLOWED, "abc"));
         appConfigStore.insertOrUpdateAppConfig(new AppConfig("com.facebook.katana",
                 appSessionConfigList));
+    }
+
+    public LocalCourse getCourse(String courseId) {
+        return appConfigStore.getCourse(courseId);
+    }
+
+    private void insertDummyCourse() {
+        String courseId = "abc";
+        List<QuestionDetails> questionDetailsList = new ArrayList<>();
+        List<McqOptions> mcqOptionsList = new ArrayList<>();
+        mcqOptionsList.add(new McqOptions(1, "one"));
+        mcqOptionsList.add(new McqOptions(2, "two"));
+        mcqOptionsList.add(new McqOptions(3, "three"));
+        mcqOptionsList.add(new McqOptions(4, "four"));
+        String questionText = "dummy question";
+        questionDetailsList.add(new QuestionDetails("1", questionText, QuestionType.MCQ, mcqOptionsList, 1));
+        appConfigStore.insertOrUpdateCourse(new LocalCourse(courseId, questionDetailsList));
     }
 }

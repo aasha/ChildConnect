@@ -7,5 +7,6 @@ import java.util.List;
  */
 public class AppUsage {
     public String appName;
+    public String appImageLink;
     public List<UsageDetails> usageDetails;
 }

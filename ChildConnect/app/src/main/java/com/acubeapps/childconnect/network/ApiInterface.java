@@ -23,24 +23,24 @@ import retrofit2.http.POST;
  * Created by aasha.medhi on 9/10/16.
  */
 public interface ApiInterface {
-    @POST("/register")
+    @POST("ChildConnectServer/login/parent")
     Call<RegisterResponse> register(@Body ParentRegisterRequest req);
 
-    @POST("/registerChild")
+    @POST("ChildConnectServer/login/child")
     Call<ChildRegisterResponse> registerChild(@Body ChildRegisterRequest req);
 
-    @POST("/sendCollectedData")
+    @POST("ChildConnectServer/upload/childDataUsage")
     Call<BaseResponse> sendCollectedData(@Body SendCollectedDataRequest req);
 
-    @POST("/getUsageConfig")
+    @POST("ChildConnectServer/getUsageConfig")
     Call<GetUsageConfigResponse> getUsageConfig(@Body GetUsageConfigRequest req);
 
-    @POST("/getAllCourses")
+    @POST("ChildConnectServer/getAllCourses")
     Call<GetAllCoursesResponse> getAllCourses(@Body GetAllCoursesRequest req);
 
-    @POST("/getCourseDetails")
+    @POST("ChildConnectServer/getCourseDetails")
     Call<GetCourseDetailsResponse> getCourseDetails(@Body GetCourseDetailsRequest req);
 
-    @POST("/getSolution")
+    @POST("ChildConnectServer/getSolution")
     Call<GetSolutionResponse> getSolution(@Body GetSolutionRequest req);
 }

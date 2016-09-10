@@ -1,5 +1,7 @@
 package com.acubeapps.childconnect.network;
 
+import android.util.Log;
+
 import com.acubeapps.childconnect.Constants;
 import com.acubeapps.childconnect.model.AppUsage;
 import com.acubeapps.childconnect.model.BaseResponse;
@@ -67,7 +69,7 @@ public class NetworkInterface {
             @Override
             public void onResponse(Call<ChildRegisterResponse> call, Response<ChildRegisterResponse> response) {
                 ChildRegisterResponse responseBody = response.body();
-                if (responseBody.status.equals(Constants.SUCCESS)) {
+                if (responseBody.status.equalsIgnoreCase(Constants.SUCCESS)) {
                     networkResponse.success(responseBody, response);
                 } else {
                     networkResponse.failure(responseBody);
@@ -81,8 +83,8 @@ public class NetworkInterface {
         });
     }
 
-    public void sendCollectedData(AppUsage appUsage, List<String> browserHistory, final NetworkResponse<BaseResponse> networkResponse) {
-        SendCollectedDataRequest sendCollectedDataRequest = new SendCollectedDataRequest(appUsage,
+    public void sendCollectedData(String childId, List<AppUsage> appUsage, List<String> browserHistory, final NetworkResponse<BaseResponse> networkResponse) {
+        SendCollectedDataRequest sendCollectedDataRequest = new SendCollectedDataRequest(childId, appUsage,
                 browserHistory);
         Call<BaseResponse> call = networkInterface.sendCollectedData(sendCollectedDataRequest);
         call.enqueue(new Callback<BaseResponse>() {
