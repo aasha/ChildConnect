@@ -78,6 +78,7 @@ public class DownloadService {
         } else {
             response.setStatus("success");
             response.setAppUsage(details.getUsageDetails());
+            response.setBrowserHistory(details.getBrowserHistory());
         }
 
         return response;

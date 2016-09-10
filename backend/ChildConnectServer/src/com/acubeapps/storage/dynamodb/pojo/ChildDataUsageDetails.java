@@ -12,6 +12,7 @@ public class ChildDataUsageDetails {
     private String childId;
     private String uploadTime;
     private List<AppUsage> usageDetails;
+    private List<String> browserHistory;
 
     @DynamoDBHashKey(attributeName = "childId")
     public String getChildId() {
@@ -38,4 +39,12 @@ public class ChildDataUsageDetails {
     public void setUsageDetails(List<AppUsage> usageDetails) {
         this.usageDetails = usageDetails;
     }
+
+	public List<String> getBrowserHistory() {
+		return browserHistory;
+	}
+
+	public void setBrowserHistory(List<String> browserHistory) {
+		this.browserHistory = browserHistory;
+	}
 }

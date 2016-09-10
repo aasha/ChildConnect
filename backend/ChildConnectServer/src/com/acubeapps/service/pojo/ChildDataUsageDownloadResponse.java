@@ -6,6 +6,7 @@ public class ChildDataUsageDownloadResponse {
     private String status;
     private List<Error> errorList;
     private List<AppUsage> appUsage;
+    private List<String> browserHistory;
 
     public String getStatus() {
         return status;
@@ -30,4 +31,12 @@ public class ChildDataUsageDownloadResponse {
     public void setAppUsage(List<AppUsage> appUsage) {
         this.appUsage = appUsage;
     }
+
+	public List<String> getBrowserHistory() {
+		return browserHistory;
+	}
+
+	public void setBrowserHistory(List<String> browserHistory) {
+		this.browserHistory = browserHistory;
+	}
 }
