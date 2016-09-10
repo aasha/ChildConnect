@@ -39,7 +39,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/txt_email"
         android:id="@+id/edit_password"
-        android:textTy
         android:layout_toRightOf="@+id/txt_email"/>
 
 </RelativeLayout>

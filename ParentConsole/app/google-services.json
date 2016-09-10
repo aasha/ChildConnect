@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "773509619008",
+    "project_id": "parentconnect-a39d8"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:773509619008:android:9064a7d6753df650",
+        "android_client_info": {
+          "package_name": "com.acubeapps.parentconsole"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "773509619008-u7ltm6eiq4832ri4a09p0oeg8crmtmui.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.acubeapps.parentconsole",
+            "certificate_hash": "E0FEF83A551FB59096ADD8030CAEEB05C06537C1"
+          }
+        },
+        {
+          "client_id": "773509619008-dgccnu4mjo7b782rrv42i16gqsh674qr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAcLLBJUPwF04mZfDGXdETOgIY-lc371uk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
