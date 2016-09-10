@@ -1,21 +1,19 @@
 package com.acubeapps.childconnect.helpers;
 
 import android.content.Context;
-import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.acubeapps.childconnect.Constants;
+import com.acubeapps.childconnect.events.CourseClearedEvent;
 import com.acubeapps.childconnect.events.ShowTaskScreenEvent;
 import com.acubeapps.childconnect.model.AppSessionConfig;
 import com.acubeapps.childconnect.model.AppStatus;
-import com.acubeapps.childconnect.task.WaitTimerActivity;
 import com.acubeapps.childconnect.utils.CommonUtils;
 import com.acubeapps.childconnect.utils.Device;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-
-import com.acubeapps.childconnect.events.ShowTaskScreenEvent;
 
 /**
  * Created by aasha.medhi on 9/10/16.
@@ -24,11 +22,14 @@ public class AppUsageManager {
     private AppPolicyManager appPolicyManager;
     private Context context;
     private EventBus eventBus;
+    private SharedPreferences preferences;
 
-    public AppUsageManager(AppPolicyManager appPolicyManager, Context context, EventBus eventBus) {
+    public AppUsageManager(AppPolicyManager appPolicyManager, Context context, EventBus eventBus,
+                           SharedPreferences preferences) {
         this.appPolicyManager = appPolicyManager;
         this.context = context;
         this.eventBus = eventBus;
+        this.preferences = preferences;
         eventBus.register(this);
     }
 
@@ -43,6 +44,8 @@ public class AppUsageManager {
             eventBus.post(new ShowTaskScreenEvent(packageName, null));
         } else {
             long startTime = CommonUtils.getStartOfTheDayTime() + sessionConfig.getSessionStartTime();
+            long lastTimeStamp = preferences.getLong(packageName, 0);
+            startTime = startTime > lastTimeStamp ? startTime : lastTimeStamp;
             long endTime = System.currentTimeMillis();
             long sessionUsage = Device.computeAppUsage(context, packageName, startTime, endTime);
             Log.d(Constants.LOG_TAG, "computed usage - " + sessionUsage);
@@ -54,10 +57,8 @@ public class AppUsageManager {
     }
 
     @Subscribe
-    public void onShowTaskScreenEvent(ShowTaskScreenEvent event) {
-        Log.d(Constants.LOG_TAG, "show task screen event received");
-        Intent dummyActivityIntent = new Intent(context, WaitTimerActivity.class);
-        dummyActivityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(dummyActivityIntent);
+    public void onCourseClearedEvent(CourseClearedEvent event) {
+        Log.d(Constants.LOG_TAG, "course cleared setting preference");
+        preferences.edit().putLong(event.getPackageName(), event.getTimestamp()).apply();
     }
 }
