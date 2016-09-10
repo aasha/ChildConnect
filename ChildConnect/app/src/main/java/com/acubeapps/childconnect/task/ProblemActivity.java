@@ -58,7 +58,7 @@ public class ProblemActivity extends AppCompatActivity implements McqFragment.On
             QuestionDetails questionDetails = new QuestionDetails();
             questionDetails.questionId = index + "";
             questionDetails.questionText = "How are you " + index;
-            questionDetails.questionType = QuestionType.MCQ.name();
+            questionDetails.questionType = QuestionType.MCQ;
             questionDetails.options = new ArrayList<McqOptions>();
             McqOptions options = new McqOptions(1, "Good");
             questionDetails.options.add(options);
@@ -100,7 +100,7 @@ public class ProblemActivity extends AppCompatActivity implements McqFragment.On
         if (null != subjectiveFragment) {
             ft.remove(subjectiveFragment).commit();
         }
-        if (questionDetails.questionType == QuestionType.MCQ.name()) {
+        if (questionDetails.questionType == QuestionType.MCQ) {
             McqFragment mcqFragment = McqFragment.newInstance(questionDetails);
             ft.add(R.id.activity_problem, mcqFragment, "MCQ").commit();
         } else {
