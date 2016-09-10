@@ -7,6 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:gravity="center"
     tools:context="com.acubeapps.parentconsole.SignInActivity">
 
     <TextView
@@ -39,7 +40,16 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/txt_email"
         android:id="@+id/edit_password"
-        android:textTy
+        android:inputType="textPassword"
         android:layout_toRightOf="@+id/txt_email"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Register"
+        android:background="@drawable/rounded_corner_blue"
+        android:layout_below="@+id/edit_password"
+        android:layout_marginTop="30dp"
+        android:textColor="#FFF"/>
 
 </RelativeLayout>
