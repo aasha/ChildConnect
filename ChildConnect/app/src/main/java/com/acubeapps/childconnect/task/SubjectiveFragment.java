@@ -90,7 +90,7 @@ public class SubjectiveFragment extends Fragment implements View.OnClickListener
         try {
             txtQuestion.setText(questionDetails.questionText);
             mCamera = getCameraInstance();
-            //mCamera.setDisplayOrientation(90);
+            mCamera.setDisplayOrientation(90);
             mCamera.enableShutterSound(true);
             // Create our Preview view and set it as the content of our activity.
             mPreview = new CameraPreview(getActivity(), mCamera);

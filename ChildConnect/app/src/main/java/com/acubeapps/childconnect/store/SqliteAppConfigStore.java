@@ -59,7 +59,7 @@ public class SqliteAppConfigStore extends SQLiteOpenHelper {
                 + ")";
 
         final String CreateCourseTable = "CREATE TABLE " + COURSETABLE + "("
-                + COURSE_ID + " TEXT PRIMARY KEY,"
+                + COURSE_ID + " TEXT,"
                 + QUESTION_ID + " TEXT,"
                 + QUESTION_TEXT + " TEXT,"
                 + QUESTION_TYPE + " INTEGER,"

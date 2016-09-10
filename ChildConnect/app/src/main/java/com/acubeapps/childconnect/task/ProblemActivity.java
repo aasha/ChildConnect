@@ -12,6 +12,8 @@ import com.acubeapps.childconnect.Constants;
 import com.acubeapps.childconnect.Injectors;
 import com.acubeapps.childconnect.R;
 import com.acubeapps.childconnect.events.CourseClearedEvent;
+import com.acubeapps.childconnect.helpers.AppPolicyManager;
+import com.acubeapps.childconnect.model.LocalCourse;
 import com.acubeapps.childconnect.model.McqOptions;
 import com.acubeapps.childconnect.model.QuestionDetails;
 import com.acubeapps.childconnect.model.QuestionType;
@@ -30,7 +32,7 @@ import butterknife.ButterKnife;
 public class ProblemActivity extends AppCompatActivity implements McqFragment.OnMcqFragmentInteractionListener ,
     SubjectiveFragment.OnSubjectiveFragmentInteractionListener{
     private int currentQuestionId = 0;
-    private int maxQuestionId = 5;
+    private int maxQuestionId = 2;
 
     String packageName;
     List<QuestionDetails> questionDetailsList;
@@ -40,6 +42,9 @@ public class ProblemActivity extends AppCompatActivity implements McqFragment.On
 
     @Inject
     SharedPreferences preferences;
+
+    @Inject
+    AppPolicyManager appPolicyManager;
 
     @Inject
     EventBus eventBus;
@@ -59,11 +64,12 @@ public class ProblemActivity extends AppCompatActivity implements McqFragment.On
         String courseId = getIntent().getStringExtra(Constants.COURSE_ID);
         packageName = getIntent().getStringExtra(Constants.PACKAGE_NAME);
         currentQuestionId = preferences.getInt(Constants.QUESTION_ID, 0);
-        questionDetailsList = getAllQuestions(courseId);
+        LocalCourse courseDetails = appPolicyManager.getCourse(courseId);
+        questionDetailsList = courseDetails.getQuestionDetailsList();
         if (currentQuestionId >= questionDetailsList.size()) {
             currentQuestionId = 0;
         }
-        maxQuestionId = currentQuestionId + 5;
+        maxQuestionId = currentQuestionId + 2;
         if (maxQuestionId >= questionDetailsList.size()) {
             maxQuestionId = questionDetailsList.size();
         }
@@ -77,24 +83,6 @@ public class ProblemActivity extends AppCompatActivity implements McqFragment.On
                 showQuestion(questionDetails);
             }
         });
-    }
-
-    private List<QuestionDetails> getAllQuestions(String courseId){
-        List<QuestionDetails> questionDetailsList = new ArrayList<>();
-        for (int index = 0; index < 10; index++) {
-            QuestionDetails questionDetails = new QuestionDetails();
-            questionDetails.questionId = index + "";
-            questionDetails.questionText = "How are you " + index;
-            questionDetails.questionType = QuestionType.SUBJECTIVE;
-            questionDetails.options = new ArrayList<McqOptions>();
-            McqOptions options = new McqOptions(1, "Good");
-            questionDetails.options.add(options);
-            options = new McqOptions(2, "Bad");
-            questionDetails.options.add(options);
-            questionDetails.solution = 1;
-            questionDetailsList.add(questionDetails);
-        }
-        return questionDetailsList;
     }
 
     @Override

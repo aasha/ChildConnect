@@ -85,7 +85,7 @@ public class SignInActivity extends AppCompatActivity implements
         btnSignIn.setOnClickListener(this);
         btnSignOut.setOnClickListener(this);
     }
-    
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
