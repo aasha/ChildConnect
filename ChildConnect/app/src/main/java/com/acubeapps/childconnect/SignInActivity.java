@@ -10,7 +10,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.acubeapps.childconnect.events.ShowTaskScreenEvent;
 import com.acubeapps.childconnect.model.ChildRegisterResponse;
 import com.acubeapps.childconnect.network.NetworkInterface;
 import com.acubeapps.childconnect.network.NetworkResponse;
@@ -23,8 +22,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
-
-import org.greenrobot.eventbus.EventBus;
 
 import javax.inject.Inject;
 
@@ -54,9 +51,6 @@ public class SignInActivity extends AppCompatActivity implements
     @Inject
     NetworkInterface networkInterface;
 
-    @Inject
-    EventBus eventBus;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,8 +66,6 @@ public class SignInActivity extends AppCompatActivity implements
                 .build();
         btnSignIn.setOnClickListener(this);
         btnSignOut.setOnClickListener(this);
-        //TODO remove
-        eventBus.post(new ShowTaskScreenEvent("abc", "1"));
     }
 
     @Override
