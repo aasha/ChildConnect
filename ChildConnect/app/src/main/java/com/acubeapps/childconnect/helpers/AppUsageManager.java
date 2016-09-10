@@ -15,6 +15,7 @@ import com.acubeapps.childconnect.utils.Device;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+
 /**
  * Created by aasha.medhi on 9/10/16.
  */
@@ -51,10 +52,26 @@ public class AppUsageManager {
             Log.d(Constants.LOG_TAG, "computed usage - " + sessionUsage);
             Log.d(Constants.LOG_TAG, "allowed appUsage - " + sessionConfig.getSessionAllowedDuration());
             if (sessionUsage > sessionConfig.getSessionAllowedDuration()) {
-                eventBus.post(new ShowTaskScreenEvent(packageName, null));
+                eventBus.post(new ShowTaskScreenEvent(packageName, sessionConfig.getTaskId()));
             }
         }
     }
+
+//    Test method for reading question details
+//    @Subscribe
+//    public  void onShowTaskScreenEvent(ShowTaskScreenEvent event) {
+//        LocalCourse localCourse = appPolicyManager.getCourse(event.getCourseId());
+//        if (localCourse != null) {
+//            List<QuestionDetails> questionDetailsList = localCourse.getQuestionDetailsList();
+//            for (QuestionDetails questionDetails : questionDetailsList) {
+//                Log.d(Constants.LOG_TAG, "question id - " + questionDetails.getQuestionId());
+//                Log.d(Constants.LOG_TAG, "question text - " + questionDetails.getQuestionText());
+//                for (McqOptions mcqOptions : questionDetails.getOptions()) {
+//                    Log.d(Constants.LOG_TAG, "option" + mcqOptions.getOptionSeq() + ". " + mcqOptions.getOptionText());
+//                }
+//            }
+//        }
+//    }
 
     @Subscribe
     public void onCourseClearedEvent(CourseClearedEvent event) {
