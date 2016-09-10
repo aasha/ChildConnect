@@ -42,7 +42,7 @@ public class AppModule {
         this.networkInterface = NetworkInterface.getInstance();
         this.sqliteAppConfigStore = new SqliteAppConfigStore(context, 1);
         appPolicyManager = new AppPolicyManager(sqliteAppConfigStore);
-        appUsageManager = new AppUsageManager(appPolicyManager, context, eventBus);
+        appUsageManager = new AppUsageManager(appPolicyManager, context, eventBus, sharedPreferences);
         taskManager = new TaskManager(context, eventBus);
     }
 
