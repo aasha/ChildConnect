@@ -2,6 +2,7 @@ package com.acubeapps.childconnect;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -51,11 +52,19 @@ public class SignInActivity extends AppCompatActivity implements
     @Inject
     NetworkInterface networkInterface;
 
+    @Inject
+    SharedPreferences sharedPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
         Injectors.appComponent().injectSignInActivity(this);
+        String childId = sharedPreferences.getString(Constants.CHILD_ID, null);
+        if (null != childId) {
+            launchMainActivity();
+            finish();
+        }
         ButterKnife.bind(this);
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
@@ -147,6 +156,7 @@ public class SignInActivity extends AppCompatActivity implements
                     @Override
                     public void success(ChildRegisterResponse childRegisterResponse, Response response) {
                         hideProgressDialog();
+                        sharedPreferences.edit().putString(Constants.CHILD_ID, childRegisterResponse.childId);
                         launchMainActivity();
                     }
 
