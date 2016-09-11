@@ -91,7 +91,7 @@ public class CourseService {
             response.setErrorList(errorList);
         } else {
             details.setCompletionStatus("COMPLETED");
-            //details.setQuestionList(request.getQuestionList());
+            details.setQuestionList(request.getQuestionList());
             //TODO: compute actual percentile
             details.setPercentile("85");
             childCourseDao.save(details);
