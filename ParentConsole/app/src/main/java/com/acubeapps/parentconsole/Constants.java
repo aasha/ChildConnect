@@ -9,6 +9,7 @@ public class Constants {
     public static final String SUCCESS = "SUCCESS";
     public static final String FAILURE = "FAILURE";
     public static final String PARENT_ID = "PARENT_ID";
+    public static final String CHILD_RESULT = "CHILD_RESULT";
     public static final String CHILD_DETAILS = "CHILD_DETAILS";
     public static final String FAILED_TO_REGISTER_PARENT = "Failed to Register Parent";
 

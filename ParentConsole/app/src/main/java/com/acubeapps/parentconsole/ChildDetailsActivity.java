@@ -41,6 +41,7 @@ public class ChildDetailsActivity extends AppCompatActivity implements View.OnCl
         btnBrowserHistory.setVisibility(View.GONE);
         btnUpdatePolicy.setOnClickListener(this);
         btnPerformance.setOnClickListener(this);
+        btnPerformance.setVisibility(View.GONE);
     }
 
     @Override

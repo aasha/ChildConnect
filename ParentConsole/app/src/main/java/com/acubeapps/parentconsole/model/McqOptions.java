@@ -7,10 +7,10 @@ import java.io.Serializable;
  */
 public class McqOptions implements Serializable {
 
-    public int optionSeq;
+    public String optionSeq;
     public String optionText;
 
-    public McqOptions(int optionSeq, String optionText) {
+    public McqOptions(String optionSeq, String optionText) {
         this.optionSeq = optionSeq;
         this.optionText = optionText;
     }
@@ -18,11 +18,11 @@ public class McqOptions implements Serializable {
     public McqOptions() {
     }
 
-    public int getOptionSeq() {
+    public String getOptionSeq() {
         return optionSeq;
     }
 
-    public void setOptionSeq(int optionSeq) {
+    public void setOptionSeq(String optionSeq) {
         this.optionSeq = optionSeq;
     }
 

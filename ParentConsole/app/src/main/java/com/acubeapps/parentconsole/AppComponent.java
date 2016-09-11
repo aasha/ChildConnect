@@ -1,5 +1,6 @@
 package com.acubeapps.parentconsole;
 
+import com.acubeapps.parentconsole.gcm.MyGcmListenerService;
 import com.acubeapps.parentconsole.gcm.RegistrationIntentService;
 
 import javax.inject.Singleton;
@@ -31,5 +32,5 @@ public interface AppComponent {
 
     void injectRegistrationIntentService(RegistrationIntentService registrationIntentService);
 
-
+    void injectGCMService(MyGcmListenerService myGcmListenerService);
 }

@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.widget.TextView;
 
 import com.acubeapps.parentconsole.adapters.ChildListAdapter;
+import com.acubeapps.parentconsole.model.ChildDetails;
 import com.acubeapps.parentconsole.model.GetChildListResponse;
 import com.acubeapps.parentconsole.network.NetworkInterface;
 import com.acubeapps.parentconsole.network.NetworkResponse;
@@ -52,6 +53,10 @@ public class ListChildActivity extends AppCompatActivity {
             public void success(GetChildListResponse getChildListResponse, Response response) {
                 childListAdapter = new ChildListAdapter(getChildListResponse.childDetailList, ListChildActivity.this);
                 childRecyclerView.setAdapter(childListAdapter);
+                for (int index = 0; index < getChildListResponse.childDetailList.size(); index++) {
+                    ChildDetails childDetails = getChildListResponse.childDetailList.get(index);
+                    sharedPreferences.edit().putString(childDetails.childId+"", childDetails.name).apply();
+                }
             }
 
             @Override

@@ -16,6 +16,7 @@ public class GcmReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Log.d(Constants.LOG_TAG, "GCM token received");
         Log.d(Constants.LOG_TAG, "GCM intent - " + intent.toString());
+
         //do download app usage data and check for results from child
     }
 }
