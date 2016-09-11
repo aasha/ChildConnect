@@ -11,7 +11,7 @@ import org.json.JSONObject;
 import com.amazonaws.util.IOUtils;
 
 public class GcmNotificationSender {
-	public static void sendGcm(String to, JSONObject msg) {
+	public static void sendGcm(String to, JSONObject msg, String API_KEY) {
 		try {
 			// Prepare JSON containing the GCM message content. What to send and
 			// where to send.
@@ -24,7 +24,7 @@ public class GcmNotificationSender {
 			// Create connection to send GCM Message request.
 			URL url = new URL("https://android.googleapis.com/gcm/send");
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-			conn.setRequestProperty("Authorization", "key=" + "AIzaSyCmpbxEc5nprFVYoItLZAfW9QBEoStTW5M");
+			conn.setRequestProperty("Authorization", "key=" + API_KEY);
 			conn.setRequestProperty("Content-Type", "application/json");
 			conn.setRequestMethod("POST");
 			conn.setDoOutput(true);

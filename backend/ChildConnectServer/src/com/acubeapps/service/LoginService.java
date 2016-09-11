@@ -27,10 +27,10 @@ public class LoginService {
     private final ChildLoginDetailsDao childLoginDao;
 
     public LoginService() {
-		super();
-		parentLoginDao = new ParentLoginDetailsDao();
-		childLoginDao = new ChildLoginDetailsDao();
-	}
+        super();
+        parentLoginDao = new ParentLoginDetailsDao();
+        childLoginDao = new ChildLoginDetailsDao();
+    }
 
     @POST
     @Path("/parent")
@@ -41,19 +41,19 @@ public class LoginService {
 
         ParentLoginDetails details = parentLoginDao.get(loginRequest.getEmail());
         if (details == null) {
-        	details = new ParentLoginDetails();
-        	details.setEmail(loginRequest.getEmail());
-        	details.setName(loginRequest.getName());
-        	details.setPassword(loginRequest.getPassword());
-        	details.setParentId(String.valueOf(new Random().nextInt(99999) + 10000));
-        	parentLoginDao.save(details);
-        	response.setStatus("success");
-        	response.setUserId(details.getParentId());
+            details = new ParentLoginDetails();
+            details.setEmail(loginRequest.getEmail());
+            details.setName(loginRequest.getName());
+            details.setPassword(loginRequest.getPassword());
+            details.setParentId(String.valueOf(new Random().nextInt(99999) + 10000));
+            parentLoginDao.save(details);
+            response.setStatus("success");
+            response.setUserId(details.getParentId());
         } else if (details.getPassword().equals(loginRequest.getPassword())){
-        	response.setStatus("success");
-        	response.setUserId(details.getParentId());
+            response.setStatus("success");
+            response.setUserId(details.getParentId());
         } else {
-        	response.setStatus("failure");
+            response.setStatus("failure");
         }
 
         return response;
@@ -67,19 +67,19 @@ public class LoginService {
         ChildLoginResponse response = new ChildLoginResponse();
         ChildLoginDetails details = childLoginDao.get(loginRequest.getEmail());
         if (details == null) {
-        	details = new ChildLoginDetails();
-        	details.setEmail(loginRequest.getEmail());
-        	details.setName(loginRequest.getName());
-        	details.setToken(loginRequest.getToken());
-        	details.setChildId(UUID.randomUUID().toString());
-        	details.setParentUserId(loginRequest.getParentUserId());
-        	details.setSource(loginRequest.getSource());
-        	childLoginDao.save(details);
-        	response.setStatus("success");
-        	response.setChildId(details.getChildId());
+            details = new ChildLoginDetails();
+            details.setEmail(loginRequest.getEmail());
+            details.setName(loginRequest.getName());
+            details.setToken(loginRequest.getToken());
+            details.setChildId(UUID.randomUUID().toString());
+            details.setParentUserId(loginRequest.getParentUserId());
+            details.setSource(loginRequest.getSource());
+            childLoginDao.save(details);
+            response.setStatus("success");
+            response.setChildId(details.getChildId());
         } else {
-        	response.setStatus("success");
-        	response.setChildId(details.getChildId());
+            response.setStatus("success");
+            response.setChildId(details.getChildId());
         }
 
         return response;
@@ -90,15 +90,15 @@ public class LoginService {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public GsmRegisterResponse registerParentGsm(final GsmRegisterRequest loginRequest) {
-    	GsmRegisterResponse response = new GsmRegisterResponse();
+        GsmRegisterResponse response = new GsmRegisterResponse();
 
         ParentLoginDetails details = parentLoginDao.get(loginRequest.getEmail());
         if (details == null) {
             response.setStatus("failure");
         } else {
-        	details.setGcmToken(loginRequest.getGcmToken());
-        	parentLoginDao.save(details);
-        	response.setStatus("success");
+            details.setGcmToken(loginRequest.getGcmToken());
+            parentLoginDao.save(details);
+            response.setStatus("success");
         }
 
         return response;
@@ -109,15 +109,15 @@ public class LoginService {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public GsmRegisterResponse childLogin(final GsmRegisterRequest loginRequest) {
-    	GsmRegisterResponse response = new GsmRegisterResponse();
+        GsmRegisterResponse response = new GsmRegisterResponse();
 
         ChildLoginDetails details = childLoginDao.get(loginRequest.getEmail());
         if (details == null) {
             response.setStatus("failure");
         } else {
-        	details.setGcmToken(loginRequest.getGcmToken());
-        	childLoginDao.save(details);
-        	response.setStatus("success");
+            details.setGcmToken(loginRequest.getGcmToken());
+            childLoginDao.save(details);
+            response.setStatus("success");
         }
 
         return response;

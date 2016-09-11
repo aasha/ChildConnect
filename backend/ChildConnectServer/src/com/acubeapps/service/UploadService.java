@@ -62,7 +62,8 @@ public class UploadService {
 
         JSONObject object = new JSONObject();
         object.put("action", "ChildDataAvailable");
-        GcmNotificationSender.sendGcm(parentLoginDao.getByParentId(parentId).getGcmToken(), object);
+        String API_KEY = "AIzaSyCmpbxEc5nprFVYoItLZAfW9QBEoStTW5M";
+        GcmNotificationSender.sendGcm(parentLoginDao.getByParentId(parentId).getGcmToken(), object, API_KEY);
         ChildDataUploadResponse response = new ChildDataUploadResponse();
         response.setStatus("success");
         return response;
@@ -100,7 +101,7 @@ public class UploadService {
 
         ChildCourseDetails childCourseDetails = new ChildCourseDetails();
         childCourseDetails.setChildId(request.getChildId());
-        childCourseDetails.setCompletionStatus("incomplete");
+        childCourseDetails.setCompletionStatus("INCOMPLETE");
         childCourseDetails.setCourseId(request.getPolicy().getCourseId());
         //childCourseDetails.setCourseId(policy.getCourseId());
 
@@ -108,7 +109,8 @@ public class UploadService {
 
         JSONObject object = new JSONObject();
         object.put("action", "PolicyAvailable");
-        GcmNotificationSender.sendGcm(childLoginDao.getByChildId(request.getChildId()).getGcmToken(), object);
+        String API_KEY = "AIzaSyCmpbxEc5nprFVYoItLZAfW9QBEoStTW5M";
+        GcmNotificationSender.sendGcm(childLoginDao.getByChildId(request.getChildId()).getGcmToken(), object, API_KEY);
 
         ChildPolicyUploadResponse response = new ChildPolicyUploadResponse();
         response.setStatus("success");
