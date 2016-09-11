@@ -10,7 +10,7 @@ public class AppSessionConfig {
     private AppStatus status;
 
     public AppSessionConfig(long sessionStartTime, long sessionEndTime, long sessionAllowedDuration,
-                            AppStatus status, String taskId) {
+                            AppStatus status) {
         this.sessionStartTime = sessionStartTime;
         this.sessionEndTime = sessionEndTime;
         this.sessionAllowedDuration = sessionAllowedDuration;

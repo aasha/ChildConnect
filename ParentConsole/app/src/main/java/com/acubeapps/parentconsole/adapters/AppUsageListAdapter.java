@@ -20,11 +20,12 @@ public class AppUsageListAdapter extends RecyclerView.Adapter<AppUsageListAdapte
     private List<AppUsage> appUsageList;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView appName;
+        public TextView appName, appTime;
 
         public MyViewHolder(View view) {
             super(view);
             appName = (TextView) view.findViewById(R.id.txt_app_name);
+            appTime = (TextView) view.findViewById(R.id.txt_app_time);
         }
     }
 
@@ -46,6 +47,7 @@ public class AppUsageListAdapter extends RecyclerView.Adapter<AppUsageListAdapte
     public void onBindViewHolder(MyViewHolder holder, int position) {
         AppUsage appUsage = appUsageList.get(position);
         holder.appName.setText(appUsage.displayName);
+        holder.appTime.setText("" + appUsage.duration / 60000 + " mins");
     }
 
     @Override

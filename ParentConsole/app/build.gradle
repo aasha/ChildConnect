@@ -14,7 +14,7 @@ android {
     }
     signingConfigs {
         release {
-            storeFile file('/Users/ajitesh.shukla/Desktop/IntelliJProjects/ChildConnect/dodapp.jks')
+            storeFile file('/Users/aasha.medhi/Documents/workspaceChildConnect/ChildConnect/dodapp.jks')
             storePassword 'sharingan123@ISMT'
             keyAlias 'dodappkey'
             keyPassword 'sharingan123@ISMT'
@@ -38,12 +38,8 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:24.2.0'
     apt 'com.jakewharton:butterknife-compiler:8.0.1'
-
     apt "com.google.dagger:dagger-compiler:2.0.1"
-    compile group: 'javax.annotation', name: 'jsr250-api', version: '1.0'
-    compile 'com.android.support:appcompat-v7:24.2.0'
-    compile 'com.android.support:design:24.2.0'
-    compile 'com.android.support:appcompat-v7:24.2.0'
+    compile 'javax.annotation:jsr250-api:1.0'
     compile 'com.android.support:design:24.2.0'
     compile 'com.jakewharton:butterknife:8.0.1'
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
@@ -51,6 +47,5 @@ dependencies {
     compile 'com.google.code.gson:gson:2.6.2'
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.google.dagger:dagger:2.0.1'
-    compile 'com.android.support:support-v4:24.2.0'
-    compile "com.google.android.gms:play-services-gcm:8.3.0"
+    compile 'com.google.android.gms:play-services-gcm:8.3.0'
 }

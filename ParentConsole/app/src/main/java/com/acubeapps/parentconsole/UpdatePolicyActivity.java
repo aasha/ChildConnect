@@ -86,21 +86,38 @@ public class UpdatePolicyActivity extends AppCompatActivity implements View.OnCl
             @Override
             public void success(GetUsageConfigResponse getUsageConfigResponse, Response response) {
                 policy = getUsageConfigResponse.policy;
+                if (policy == null) {
+                    policy = getDummyPolicy();
+                }
                 bindData();
             }
 
             @Override
             public void failure(GetUsageConfigResponse getUsageConfigResponse) {
-
+                policy = getDummyPolicy();
+                bindData();
             }
 
             @Override
             public void networkFailure(Throwable error) {
-
+                policy = getDummyPolicy();
+                bindData();
             }
         });
         btnSubmitPolicy.setOnClickListener(this);
 
+    }
+
+    private Policy getDummyPolicy(){
+        Policy policy = new Policy();
+        policy.courseId = "SampleCourse";
+        policy.appConfigList = new ArrayList<>();
+        List<AppSessionConfig> appSessionConfigList = new ArrayList<>();
+        AppSessionConfig appSessionConfig = new AppSessionConfig(0, 0, 0, AppStatus.ALLOWED);
+        appSessionConfigList.add(appSessionConfig);
+        AppConfig appConfig = new AppConfig("com.facebook.katana", "Facebook" ,appSessionConfigList);
+        policy.appConfigList.add(appConfig);
+        return policy;
     }
 
     private void bindData(){
@@ -206,11 +223,10 @@ public class UpdatePolicyActivity extends AppCompatActivity implements View.OnCl
                     String durationStr = txtDuration.getText().toString();
                     long duration = Integer.valueOf(durationStr) * 60000;
                     AppStatus appStatus = (AppStatus) spinnerStatus.getSelectedItem();
-                    String taskId = (String) spinnerTask.getSelectedItem();
 
                     List<AppSessionConfig> appSessionConfigList = null;
                     appSessionConfigList = new ArrayList<>();
-                    AppSessionConfig appSessionConfig = new AppSessionConfig(startTime, endTime, duration, appStatus, taskId);
+                    AppSessionConfig appSessionConfig = new AppSessionConfig(startTime, endTime, duration, appStatus);
                     appSessionConfigList.add(appSessionConfig);
                     AppConfig appConfig = null;
                     for (AppConfig appConfigIndex: appConfigList){

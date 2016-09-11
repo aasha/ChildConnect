@@ -38,6 +38,7 @@ public class ChildDetailsActivity extends AppCompatActivity implements View.OnCl
         setTitle(childDetails.name);
         btnAppUsage.setOnClickListener(this);
         btnBrowserHistory.setOnClickListener(this);
+        btnBrowserHistory.setVisibility(View.GONE);
         btnUpdatePolicy.setOnClickListener(this);
         btnPerformance.setOnClickListener(this);
     }

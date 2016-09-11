@@ -8,7 +8,30 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.acubeapps.parentconsole.AppUsageActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/layoutHeader">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="App Name"
+            android:textColor="@color/baseColor"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_weight="1"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Time Used"
+            android:textColor="@color/baseColor"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_weight="1"/>
+    </LinearLayout>
     <android.support.v7.widget.RecyclerView
+        android:layout_below="@+id/layoutHeader"
         android:id="@+id/recycler_view_app_usage_list"
         android:scrollbars="vertical"
         android:layout_width="match_parent"

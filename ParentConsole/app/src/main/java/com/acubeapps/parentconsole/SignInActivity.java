@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.acubeapps.parentconsole.gcm.RegistrationIntentService;
 import com.acubeapps.parentconsole.model.ParentRegisterResponse;
 import com.acubeapps.parentconsole.network.NetworkInterface;
 import com.acubeapps.parentconsole.network.NetworkResponse;
@@ -61,6 +62,8 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                             @Override
                             public void success(ParentRegisterResponse parentRegisterResponse, Response response) {
                                 sharedPreferences.edit().putString(Constants.PARENT_ID, parentRegisterResponse.userId).apply();
+                                sharedPreferences.edit().putString(Constants.EMAIL, editEmail.getText().toString()).apply();
+                                startGcmRegistration();
                                 launchChildActivity();
                                 finish();
                             }
@@ -82,5 +85,10 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     private void launchChildActivity(){
         Intent intent = new Intent(this, ListChildActivity.class);
         startActivity(intent);
+    }
+
+    private void startGcmRegistration() {
+        Intent intent = new Intent(this, RegistrationIntentService.class);
+        startService(intent);
     }
 }
