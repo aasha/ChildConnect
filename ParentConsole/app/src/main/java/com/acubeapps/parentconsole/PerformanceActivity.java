@@ -78,7 +78,7 @@ public class PerformanceActivity extends AppCompatActivity {
         List<QuestionDetails> questionDetailsList = result.questionList;
         QuestionDetails q1 = questionDetailsList.get(0);
         txtQ1.setText(q1.questionText + " ?");
-        txtSoln1.setText("Your kid answered " + q1.options.get(Integer.valueOf(q1.getSolution()) - 1).getOptionText());
+        txtSoln1.setText("Your kid answered : " + q1.options.get(Integer.valueOf(q1.getSolution()) - 1).getOptionText());
 
         QuestionDetails q2 = questionDetailsList.get(1);
         txtQ2.setText(q2.questionText);
