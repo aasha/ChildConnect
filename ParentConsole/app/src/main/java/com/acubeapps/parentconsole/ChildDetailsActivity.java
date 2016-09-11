@@ -26,6 +26,8 @@ public class ChildDetailsActivity extends AppCompatActivity implements View.OnCl
     @BindView(R.id.btn_performance)
     Button btnPerformance;
 
+    ChildDetails childDetails;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,8 +35,8 @@ public class ChildDetailsActivity extends AppCompatActivity implements View.OnCl
         setContentView(R.layout.activity_child_details);
         Injectors.appComponent().injectChildDetailsActivity(this);
         ButterKnife.bind(this);
-        ChildDetails childDetails = getIntent().getParcelableExtra(Constants.CHILD_DETAILS);
-        //getActionBar().setTitle(childDetails.name);
+        childDetails = getIntent().getParcelableExtra(Constants.CHILD_DETAILS);
+        //getActionBar().setTitle(childDetails.appName);
         btnAppUsage.setOnClickListener(this);
         btnBrowserHistory.setOnClickListener(this);
         btnUpdatePolicy.setOnClickListener(this);
@@ -58,6 +60,7 @@ public class ChildDetailsActivity extends AppCompatActivity implements View.OnCl
                 intent = new Intent(ChildDetailsActivity.this, PerformanceActivity.class);
                 break;
         }
+        intent.putExtra(Constants.CHILD_DETAILS, childDetails);
         startActivity(intent);
     }
 }
