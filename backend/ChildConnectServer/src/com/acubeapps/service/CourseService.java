@@ -10,6 +10,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.json.JSONObject;
+
 import com.acubeapps.service.pojo.CompleteCourseRequest;
 import com.acubeapps.service.pojo.CompleteCourseResponse;
 import com.acubeapps.service.pojo.CourseDetails;
@@ -19,19 +21,26 @@ import com.acubeapps.service.pojo.GetCourseDetailsResponse;
 import com.acubeapps.service.pojo.McqOptions;
 import com.acubeapps.service.pojo.Question;
 import com.acubeapps.storage.dynamodb.dao.ChildCourseDao;
+import com.acubeapps.storage.dynamodb.dao.ChildLoginDetailsDao;
 import com.acubeapps.storage.dynamodb.dao.CourseDetailsDao;
+import com.acubeapps.storage.dynamodb.dao.ParentLoginDetailsDao;
 import com.acubeapps.storage.dynamodb.pojo.ChildCourseDetails;
 import com.acubeapps.storage.dynamodb.pojo.CourseDetailsDdb;
+import com.acubeapps.utils.GcmNotificationSender;
 
 @Path("/courses")
 public class CourseService {
 
     private final CourseDetailsDao courseDao;
     private final ChildCourseDao childCourseDao;
+    private final ChildLoginDetailsDao childLoginDao;
+    private final ParentLoginDetailsDao parentLoginDao;
 
     public CourseService() {
         courseDao = new CourseDetailsDao();
         childCourseDao = new ChildCourseDao();
+        childLoginDao = new ChildLoginDetailsDao();
+        parentLoginDao = new ParentLoginDetailsDao();
     }
 
     @Path("/get")
@@ -81,9 +90,16 @@ public class CourseService {
             response.setErrorList(errorList);
         } else {
             details.setCompletionStatus("COMPLETED");
+            details.setQuestionList(request.getQuestionList());
             //TODO: compute actual percentile
             details.setPercentile("85");
             childCourseDao.save(details);
+
+            String parentId = childLoginDao.getByChildId(request.getChildId()).getParentUserId();
+            JSONObject msg = new JSONObject();
+            msg.put("action", "courseCompleted");
+            msg.put("course", details);
+            GcmNotificationSender.sendGcm(parentLoginDao.getByParentId(parentId).getGcmToken(), msg);
             response.setStatus("success");
         }
         return response;

@@ -1,5 +1,8 @@
 package com.acubeapps.storage.dynamodb.pojo;
 
+import java.util.List;
+
+import com.acubeapps.service.pojo.Question;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
@@ -8,6 +11,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 public class ChildCourseDetails {
     private String childId;
     private String courseId;
+    private List<Question> questionList;
     private String completionStatus;
     private String percentile;
 
@@ -44,4 +48,12 @@ public class ChildCourseDetails {
     public void setPercentile(String percentile) {
         this.percentile = percentile;
     }
+
+	public List<Question> getQuestionList() {
+		return questionList;
+	}
+
+	public void setQuestionList(List<Question> questionList) {
+		this.questionList = questionList;
+	}
 }
