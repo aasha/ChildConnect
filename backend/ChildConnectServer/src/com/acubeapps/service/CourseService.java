@@ -27,6 +27,7 @@ import com.acubeapps.storage.dynamodb.dao.ParentLoginDetailsDao;
 import com.acubeapps.storage.dynamodb.pojo.ChildCourseDetails;
 import com.acubeapps.storage.dynamodb.pojo.CourseDetailsDdb;
 import com.acubeapps.utils.GcmNotificationSender;
+import com.google.gson.Gson;
 
 @Path("/courses")
 public class CourseService {
@@ -90,7 +91,7 @@ public class CourseService {
             response.setErrorList(errorList);
         } else {
             details.setCompletionStatus("COMPLETED");
-            details.setQuestionList(request.getQuestionList());
+            //details.setQuestionList(request.getQuestionList());
             //TODO: compute actual percentile
             details.setPercentile("85");
             childCourseDao.save(details);
@@ -98,8 +99,10 @@ public class CourseService {
             String parentId = childLoginDao.getByChildId(request.getChildId()).getParentUserId();
             JSONObject msg = new JSONObject();
             msg.put("action", "courseCompleted");
-            msg.put("course", details);
-            GcmNotificationSender.sendGcm(parentLoginDao.getByParentId(parentId).getGcmToken(), msg);
+            msg.put("course", new JSONObject(details));
+            String API_KEY = "AIzaSyCtfaAGP-kisxwJQiEuIPvxYnICa24fbQo";
+            //GcmNotificationSender.sendGcm(parentLoginDao.getByParentId(parentId).getGcmToken(), new Gson()., API_KEY);
+            GcmNotificationSender.sendGcm(parentLoginDao.getByParentId(parentId).getGcmToken(), msg, API_KEY);
             response.setStatus("success");
         }
         return response;
