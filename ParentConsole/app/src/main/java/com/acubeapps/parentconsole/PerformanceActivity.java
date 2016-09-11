@@ -75,16 +75,20 @@ public class PerformanceActivity extends AppCompatActivity {
     };
 
     private void bindData(){
-        List<QuestionDetails> questionDetailsList = result.questionList;
-        QuestionDetails q1 = questionDetailsList.get(0);
-        txtQ1.setText(q1.questionText + " ?");
-        txtSoln1.setText("Your kid answered : " + q1.options.get(Integer.valueOf(q1.getSolution()) - 1).getOptionText());
+        try {
+            List<QuestionDetails> questionDetailsList = result.questionList;
+            QuestionDetails q1 = questionDetailsList.get(0);
+            txtQ1.setText(q1.questionText + " ?");
+            txtSoln1.setText("Your kid answered : " + q1.options.get(Integer.valueOf(q1.getSolution()) - 1).getOptionText());
 
-        QuestionDetails q2 = questionDetailsList.get(1);
-        txtQ2.setText(q2.questionText);
+            QuestionDetails q2 = questionDetailsList.get(1);
+            txtQ2.setText(q2.questionText);
 
-        Picasso.with(this).load(q2.getSolution()).into(target);
+            Picasso.with(this).load(q2.getSolution()).into(target);
 
-        txtPerc.setText(childName + " scored: " + result.percentile + " percentile.");
+            txtPerc.setText(childName + " scored: " + result.percentile + " percentile.");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
