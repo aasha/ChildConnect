@@ -137,23 +137,22 @@ public class UpdatePolicyActivity extends AppCompatActivity implements View.OnCl
         appStatusList.add(AppStatus.BLOCKED);
         ArrayAdapter<AppStatus> spinnerStatusAdapter = new ArrayAdapter<AppStatus>(this, android.R.layout.simple_spinner_item, appStatusList);
         spinnerStatus.setAdapter(spinnerStatusAdapter);
-        appStatusList.getPo(appSessionConfig.getStatus());
-        spinnerStatus.setDe
-        /*
-        Spinner spinnerStatus;
+        spinnerStatus.setSelection(spinnerStatusAdapter.getPosition(appSessionConfig.getStatus()));
 
-    @BindView(R.id.txt_StartTime)
-    EditText txtStartTime;
+        List<String> taskList = new ArrayList<>();
+        taskList.add("NONE");
+        String taskId = appSessionConfig.getTaskId();
+        if (taskId != null) {
+            taskList.add(taskId);
+        }
+        ArrayAdapter<String> spinnerTaskAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, taskList);
+        spinnerTask.setAdapter(spinnerTaskAdapter);
+        if (taskId != null) {
+            spinnerTask.setSelection(1);
+        } else {
+            spinnerTask.setSelection(0);
+        }
 
-    @BindView(R.id.txt_EndTime)
-    EditText txtEndTime;
-
-    @BindView(R.id.txt_Duration)
-    EditText txtDuration;
-
-    @BindView(R.id.txt_Task)
-    Spinner spinnerTask;
-         */
     }
 
     @Override
