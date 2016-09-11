@@ -48,8 +48,10 @@ public class BrowserHistoryActivity extends AppCompatActivity {
             @Override
             public void success(GetChildUsageResponse getChildListResponse, Response response) {
                 try {
-                    browserHistoryAdapter = new BrowserHistoryListAdapter(getChildListResponse.browserHistory, BrowserHistoryActivity.this);
-                    appUsageRecyclerView.setAdapter(browserHistoryAdapter);
+                    if (getChildListResponse.browserHistory != null) {
+                        browserHistoryAdapter = new BrowserHistoryListAdapter(getChildListResponse.browserHistory, BrowserHistoryActivity.this);
+                        appUsageRecyclerView.setAdapter(browserHistoryAdapter);
+                    }
                 } catch (Exception e){
                     e.printStackTrace();
                 }
