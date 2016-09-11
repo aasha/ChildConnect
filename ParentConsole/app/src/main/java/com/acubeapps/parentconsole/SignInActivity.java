@@ -80,7 +80,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void launchChildActivity(){
-        Intent intent = new Intent(this, ChildListActivity.class);
+        Intent intent = new Intent(this, ListChildActivity.class);
         startActivity(intent);
     }
 }

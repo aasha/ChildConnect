@@ -17,7 +17,7 @@ public interface AppComponent {
 
     void injectSignInActivity(SignInActivity activity);
 
-    void injectChildListActivity(ChildListActivity activity);
+    void injectListChildActivity(ListChildActivity activity);
 
     void injectChildDetailsActivity(ChildDetailsActivity activity);
 

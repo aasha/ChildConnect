@@ -1,15 +1,11 @@
 package com.acubeapps.parentconsole;
 
 import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.view.View;
 
 import com.acubeapps.parentconsole.adapters.ChildListAdapter;
 import com.acubeapps.parentconsole.model.GetChildListResponse;
@@ -22,7 +18,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import retrofit2.Response;
 
-public class ChildListActivity extends AppCompatActivity {
+public class ListChildActivity extends AppCompatActivity {
 
     @Inject
     NetworkInterface networkInterface;
@@ -34,11 +30,12 @@ public class ChildListActivity extends AppCompatActivity {
     RecyclerView childRecyclerView;
 
     ChildListAdapter childListAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_child_list);
-        Injectors.appComponent().injectChildListActivity(this);
+        setContentView(R.layout.activity_list_child);
+        Injectors.appComponent().injectListChildActivity(this);
         ButterKnife.bind(this);
         String parentId = sharedPreferences.getString(Constants.PARENT_ID, null);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
@@ -47,7 +44,7 @@ public class ChildListActivity extends AppCompatActivity {
         networkInterface.getChildList(parentId, new NetworkResponse<GetChildListResponse>() {
             @Override
             public void success(GetChildListResponse getChildListResponse, Response response) {
-                childListAdapter = new ChildListAdapter(getChildListResponse.childDetailList, ChildListActivity.this);
+                childListAdapter = new ChildListAdapter(getChildListResponse.childDetailList, ListChildActivity.this);
                 childRecyclerView.setAdapter(childListAdapter);
             }
 
@@ -62,5 +59,4 @@ public class ChildListActivity extends AppCompatActivity {
             }
         });
     }
-
 }

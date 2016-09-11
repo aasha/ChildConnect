@@ -2,11 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.acubeapps.parentconsole">
 
-
     <uses-permission android:name="android.permission.INTERNET" />
-    <permission android:name="com.acubeapps.parentconsole.permission.C2D_MESSAGE" android:protectionLevel="signature" />
-    <uses-permission android:name="com.acubeapps.parentconsole.permission.C2D_MESSAGE"/>
 
+    <permission
+        android:name="com.acubeapps.parentconsole.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="com.acubeapps.parentconsole.permission.C2D_MESSAGE" />
 
     <application
         android:name=".MainApplication"
@@ -22,34 +24,31 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ChildListActivity"
-            android:label="@string/title_activity_child_list"
-            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".ChildListActivity" />
         <activity android:name=".ChildDetailsActivity" />
         <activity android:name=".AppUsageActivity" />
         <activity android:name=".BrowserHistoryActivity" />
         <activity android:name=".UpdatePolicyActivity" />
-        <activity android:name=".PerformanceActivity"></activity>
+        <activity android:name=".PerformanceActivity" />
 
         <receiver
             android:name=".gcm.GcmReceiver"
             android:exported="true"
-            android:permission="com.google.android.c2dm.permission.SEND" >
+            android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+
                 <category android:name="com.example.gcm" />
             </intent-filter>
         </receiver>
 
         <service
             android:name=".gcm.MyGcmListenerService"
-            android:exported="false" >
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
             </intent-filter>
         </service>
-
         <service
             android:name=".gcm.MyInstanceIdListenerService"
             android:exported="false">
@@ -57,9 +56,11 @@
                 <action android:name="com.google.android.gms.iid.InstanceID" />
             </intent-filter>
         </service>
-
-        <service android:name=".gcm.RegistrationIntentService"
+        <service
+            android:name=".gcm.RegistrationIntentService"
             android:enabled="true" />
+
+        <activity android:name=".ListChildActivity"></activity>
     </application>
 
 </manifest>
