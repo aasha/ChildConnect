@@ -3,6 +3,7 @@ package com.acubeapps.parentconsole;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -11,17 +12,22 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.acubeapps.parentconsole.model.AppConfig;
 import com.acubeapps.parentconsole.model.AppSessionConfig;
 import com.acubeapps.parentconsole.model.AppStatus;
+import com.acubeapps.parentconsole.model.BaseResponse;
 import com.acubeapps.parentconsole.model.ChildDetails;
 import com.acubeapps.parentconsole.model.GetUsageConfigResponse;
 import com.acubeapps.parentconsole.model.Policy;
 import com.acubeapps.parentconsole.network.NetworkInterface;
 import com.acubeapps.parentconsole.network.NetworkResponse;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -59,7 +65,14 @@ public class UpdatePolicyActivity extends AppCompatActivity implements View.OnCl
     Button btnSubmitPolicy;
 
     @Inject
+    SharedPreferences sharedPreferences;
+
+    @Inject
     NetworkInterface networkInterface;
+
+    String appPackageName;
+    String displayName;
+    Policy policy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,8 +85,8 @@ public class UpdatePolicyActivity extends AppCompatActivity implements View.OnCl
         networkInterface.getChildUsagePolicy(childDetails.childId, new NetworkResponse<GetUsageConfigResponse>() {
             @Override
             public void success(GetUsageConfigResponse getUsageConfigResponse, Response response) {
-                Policy policy = getUsageConfigResponse.policy;
-                bindData(policy);
+                policy = getUsageConfigResponse.policy;
+                bindData();
             }
 
             @Override
@@ -90,7 +103,7 @@ public class UpdatePolicyActivity extends AppCompatActivity implements View.OnCl
 
     }
 
-    private void bindData(final Policy policy){
+    private void bindData(){
         final List<AppConfig> appConfigList = policy.appConfigList;
         List<String> appNameList = new ArrayList<>();
         for (int index = 0; index < appConfigList.size(); index++) {
@@ -118,40 +131,123 @@ public class UpdatePolicyActivity extends AppCompatActivity implements View.OnCl
     }
 
     private void updateAllFields(String courseId, AppConfig appConfig) {
-        txtAppName.setText(appConfig.getDisplayName());
-        AppSessionConfig appSessionConfig = appConfig.getAppSessionConfigList().get(0);
-        int minutes = (int) (appSessionConfig.getSessionStartTime() % 3600000);
-        int hours = (int) (appSessionConfig.getSessionStartTime() / 3600000);
-        txtStartTime.setText(hours + ":" + minutes);
-        minutes = (int) (appSessionConfig.getSessionEndTime() % 3600000);
-        hours = (int) (appSessionConfig.getSessionEndTime() / 3600000);
-        txtEndTime.setText(hours + ":" + minutes);
-        txtDuration.setText("" + appSessionConfig.getSessionAllowedDuration()/60000);
-        List<AppStatus> appStatusList = new ArrayList<>();
-        appStatusList.add(AppStatus.ALLOWED);
-        appStatusList.add(AppStatus.BLOCKED);
-        ArrayAdapter<AppStatus> spinnerStatusAdapter = new ArrayAdapter<AppStatus>(this, android.R.layout.simple_spinner_item, appStatusList);
-        spinnerStatus.setAdapter(spinnerStatusAdapter);
-        spinnerStatus.setSelection(spinnerStatusAdapter.getPosition(appSessionConfig.getStatus()));
+        try {
+            appPackageName = appConfig.getAppName();
+            displayName = appConfig.getDisplayName();
+            txtAppName.setText(appConfig.getDisplayName());
+            AppSessionConfig appSessionConfig = appConfig.getAppSessionConfigList().get(0);
+            int minutes = (int) (appSessionConfig.getSessionStartTime() % 3600000);
+            int hours = (int) (appSessionConfig.getSessionStartTime() / 3600000);
+            txtStartTime.setText(hours + ":" + minutes);
+            minutes = (int) (appSessionConfig.getSessionEndTime() % 3600000);
+            hours = (int) (appSessionConfig.getSessionEndTime() / 3600000);
+            txtEndTime.setText(hours + ":" + minutes);
+            txtDuration.setText("" + appSessionConfig.getSessionAllowedDuration() / 60000);
+            List<AppStatus> appStatusList = new ArrayList<>();
+            appStatusList.add(AppStatus.ALLOWED);
+            appStatusList.add(AppStatus.BLOCKED);
+            ArrayAdapter<AppStatus> spinnerStatusAdapter = new ArrayAdapter<AppStatus>(this, android.R.layout.simple_spinner_item, appStatusList);
+            spinnerStatus.setAdapter(spinnerStatusAdapter);
+            spinnerStatus.setSelection(spinnerStatusAdapter.getPosition(appSessionConfig.getStatus()));
 
-        List<String> taskList = new ArrayList<>();
-        taskList.add("NONE");
-        if (courseId != null) {
-            taskList.add(courseId);
+            List<String> taskList = new ArrayList<>();
+            taskList.add("NONE");
+            if (courseId != null) {
+                taskList.add(courseId);
+            }
+            ArrayAdapter<String> spinnerTaskAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, taskList);
+            spinnerTask.setAdapter(spinnerTaskAdapter);
+            if (courseId != null) {
+                spinnerTask.setSelection(1);
+            } else {
+                spinnerTask.setSelection(0);
+            }
+        } catch (Exception e){
+            e.printStackTrace();
         }
-        ArrayAdapter<String> spinnerTaskAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, taskList);
-        spinnerTask.setAdapter(spinnerTaskAdapter);
-        if (courseId != null) {
-            spinnerTask.setSelection(1);
-        } else {
-            spinnerTask.setSelection(0);
-        }
-
     }
 
     @Override
     public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_submit:
+                try {
+                    boolean status;
+                    status = validateFields(txtStartTime.getText().toString());
+                    if (status == false) {
+                        Toast.makeText(UpdatePolicyActivity.this, "Please insert valid start time", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    status = validateFields(txtEndTime.getText().toString());
+                    if (status == false) {
+                        Toast.makeText(UpdatePolicyActivity.this, "Please insert valid end time", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    status = validateFields(txtDuration.getText().toString());
+                    if (status == false) {
+                        Toast.makeText(UpdatePolicyActivity.this, "Please insert valid duration time", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    String parentId = sharedPreferences.getString(Constants.PARENT_ID, null);
+                    policy.courseId = spinnerTask.getSelectedItem().toString();
+                    List<AppConfig> appConfigList = policy.appConfigList;
+                    String startTimeStr =  txtStartTime.getText().toString();
+                    String[] times = startTimeStr.split(":");
+                    long hours = Integer.valueOf(times[0]);
+                    long mins = Integer.valueOf(times[1]);
+                    long startTime = hours * 3600000 + mins * 60000;
 
+                    String endTimeStr =  txtEndTime.getText().toString();
+                    times = endTimeStr.split(":");
+                    hours = Integer.valueOf(times[0]);
+                    mins = Integer.valueOf(times[1]);
+                    long endTime = hours * 3600000 + mins * 60000;
+
+                    String durationStr = txtDuration.getText().toString();
+                    long duration = Integer.valueOf(durationStr) * 60000;
+                    AppStatus appStatus = (AppStatus) spinnerStatus.getSelectedItem();
+                    String taskId = (String) spinnerTask.getSelectedItem();
+
+                    List<AppSessionConfig> appSessionConfigList = null;
+                    appSessionConfigList = new ArrayList<>();
+                    AppSessionConfig appSessionConfig = new AppSessionConfig(startTime, endTime, duration, appStatus, taskId);
+                    appSessionConfigList.add(appSessionConfig);
+                    AppConfig appConfig = null;
+                    for (AppConfig appConfigIndex: appConfigList){
+                        if (appConfigIndex.getAppName().equals(appPackageName)){
+                            appConfig = appConfigIndex;
+                        }
+                    }
+                    if (appConfig != null){
+                        appConfigList.remove(appConfig);
+
+                    }
+                    appConfig = new AppConfig(appPackageName, displayName, appSessionConfigList);
+                    appConfigList.add(appConfig);
+                    policy.appConfigList = appConfigList;
+                    networkInterface.setChildUsagePolicy(childDetails.childId, parentId, policy, new NetworkResponse<BaseResponse>(){
+
+                        @Override
+                        public void success(BaseResponse baseResponse, Response response) {
+                            Toast.makeText(UpdatePolicyActivity.this, "Successfully updated policy", Toast.LENGTH_LONG).show();
+                        }
+
+                        @Override
+                        public void failure(BaseResponse baseResponse) {
+                            Toast.makeText(UpdatePolicyActivity.this, "Failed to update policy", Toast.LENGTH_LONG).show();
+                        }
+
+                        @Override
+                        public void networkFailure(Throwable error) {
+                            Toast.makeText(UpdatePolicyActivity.this, "Failed to update policy", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                    bindData();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+        }
     }
 
     private boolean validateFields(String text){

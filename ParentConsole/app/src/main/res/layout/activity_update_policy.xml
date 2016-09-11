@@ -28,6 +28,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/txt_AppName_Label"
             android:text="App"
+            android:textStyle="bold"
             android:layout_weight="1"/>
 
         <TextView
@@ -35,7 +36,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/txt_AppName"
             android:text="App"
-            android:layout_weight="2"/>
+            android:layout_weight="1"/>
 
     </LinearLayout>
 
@@ -50,13 +51,15 @@
             android:layout_height="wrap_content"
             android:id="@+id/txt_Status_Label"
             android:text="Status"
-            android:layout_weight="1"/>
+            android:textStyle="bold"
+            android:layout_weight="1"
+            android:layout_marginRight="42dp"/>
 
         <Spinner
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/spinner_Status"
-            android:layout_weight="2"/>
+            android:layout_weight="1"/>
 
     </LinearLayout>
 
@@ -66,14 +69,16 @@
         android:orientation="horizontal">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/txt_StartTime_Label"
             android:text="Start Time"
-            android:layout_weight="1"/>
+            android:textStyle="bold"
+            android:layout_weight="1"
+            android:layout_marginRight="50dp"/>
 
         <EditText
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/txt_StartTime"
             android:inputType="time"
@@ -91,6 +96,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/txt_EndTime_Label"
             android:text="End Time"
+            android:textStyle="bold"
+            android:layout_marginRight="14dp"
             android:layout_weight="1"/>
 
         <EditText
@@ -113,6 +120,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/txt_Duration_Label"
             android:text="Duration(mins)"
+            android:textStyle="bold"
             android:layout_weight="1"/>
 
         <EditText
@@ -120,7 +128,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/txt_Duration"
             android:inputType="number"
-            android:layout_weight="2"/>
+            android:layout_weight="3"/>
 
     </LinearLayout>
 
@@ -134,13 +142,15 @@
             android:layout_height="wrap_content"
             android:id="@+id/txt_Task_Label"
             android:text="Task"
-            android:layout_weight="1"/>
+            android:textStyle="bold"
+            android:layout_weight="1"
+            android:layout_marginRight="90dp"/>
 
         <Spinner
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/txt_Task"
-            android:layout_weight="2"/>
+            android:layout_weight="1"/>
 
     </LinearLayout>
 
