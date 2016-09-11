@@ -1,5 +1,7 @@
 package com.acubeapps.parentconsole;
 
+import com.acubeapps.parentconsole.gcm.RegistrationIntentService;
+
 import javax.inject.Singleton;
 
 import dagger.Component;
@@ -26,6 +28,8 @@ public interface AppComponent {
     void injectUpdatePolicyActivity(UpdatePolicyActivity activity);
 
     void injectPerformaceActivity(PerformanceActivity activity);
+
+    void injectRegistrationIntentService(RegistrationIntentService registrationIntentService);
 
 
 }

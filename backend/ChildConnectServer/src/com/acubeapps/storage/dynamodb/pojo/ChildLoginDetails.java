@@ -12,6 +12,7 @@ public class ChildLoginDetails {
     private String token;
     private String source;
     private String parentUserId;
+    private String gcmToken;
 
     @DynamoDBIndexHashKey(attributeName = "childId", globalSecondaryIndexName = "childId-index")
     public String getChildId() {
@@ -55,6 +56,7 @@ public class ChildLoginDetails {
         this.source = source;
     }
 
+    @DynamoDBIndexHashKey(attributeName = "parentUserId", globalSecondaryIndexName = "parentUserId-index")
     public String getParentUserId() {
         return parentUserId;
     }
@@ -62,4 +64,12 @@ public class ChildLoginDetails {
     public void setParentUserId(String parentUserId) {
         this.parentUserId = parentUserId;
     }
+
+	public String getGcmToken() {
+		return gcmToken;
+	}
+
+	public void setGcmToken(String gcmToken) {
+		this.gcmToken = gcmToken;
+	}
 }

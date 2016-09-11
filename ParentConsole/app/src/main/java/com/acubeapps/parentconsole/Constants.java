@@ -12,4 +12,8 @@ public class Constants {
     public static final String CHILD_DETAILS = "CHILD_DETAILS";
     public static final String FAILED_TO_REGISTER_PARENT = "Failed to Register Parent";
 
+    public static final String GCM_REGISTRATION_ID = "gcm.registration.id";
+    public static final String EMAIL = "email";
+    public static final String GCM_SERVER_SYNC_DONE = "gcm.server.sync.done";
+
 }

@@ -12,12 +12,10 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.acubeapps.childconnect.events.ChildRegisteredEvent;
-import com.acubeapps.childconnect.events.ShowTaskScreenEvent;
+import com.acubeapps.childconnect.gcm.RegistrationIntentService;
 import com.acubeapps.childconnect.model.ChildRegisterResponse;
 import com.acubeapps.childconnect.network.NetworkInterface;
 import com.acubeapps.childconnect.network.NetworkResponse;
-import com.acubeapps.childconnect.task.ProblemActivity;
-import com.acubeapps.childconnect.task.WaitTimerActivity;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -71,7 +69,6 @@ public class SignInActivity extends AppCompatActivity implements
         Injectors.appComponent().injectSignInActivity(this);
         String childId = sharedPreferences.getString(Constants.CHILD_ID, null);
         if (null != childId) {
-            launchMainActivity();
             finish();
         }
         ButterKnife.bind(this);
@@ -158,7 +155,7 @@ public class SignInActivity extends AppCompatActivity implements
         }
     }
 
-    private void registerChild(GoogleSignInAccount acct) {
+    private void registerChild(final GoogleSignInAccount acct) {
         String parentId = editParentId.getText().toString();
         networkInterface.registerChild(acct.getDisplayName(), acct.getEmail(), acct.getIdToken(),
                 Constants.SOURCE_GOOGLE, parentId, new NetworkResponse<ChildRegisterResponse>() {
@@ -166,8 +163,9 @@ public class SignInActivity extends AppCompatActivity implements
                     public void success(ChildRegisterResponse childRegisterResponse, Response response) {
                         hideProgressDialog();
                         sharedPreferences.edit().putString(Constants.CHILD_ID, childRegisterResponse.childId).apply();
+                        sharedPreferences.edit().putString(Constants.EMAIL, acct.getEmail()).apply();
                         eventBus.post(new ChildRegisteredEvent());
-                        launchMainActivity();
+                        registerGcmToken();
                         finish();
                     }
 
@@ -187,9 +185,10 @@ public class SignInActivity extends AppCompatActivity implements
                 });
     }
 
-    private void launchMainActivity() {
-        Intent intent = new Intent(this, PermissionsActivity.class);
-        startActivity(intent);
+    private void registerGcmToken() {
+        Log.d(Constants.LOG_TAG, "going to launch registrationIntentService");
+        Intent registerGcmIntent = new Intent(this, RegistrationIntentService.class);
+        this.startService(registerGcmIntent);
     }
 
     private void signIn() {

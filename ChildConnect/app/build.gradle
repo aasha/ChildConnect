@@ -3,37 +3,46 @@ apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.neenbedankt.android-apt'
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion "24.0.2"
+    compileSdkVersion 23
+    buildToolsVersion "23.0.2"
 
     defaultConfig {
         applicationId "com.acubeapps.childconnect"
         minSdkVersion 21
-        targetSdkVersion 24
+        targetSdkVersion 22
         versionCode 1
         versionName "1.0"
+    }
+    signingConfigs {
+        release {
+            storeFile file('/Users/ajitesh.shukla/Desktop/IntelliJProjects/ChildConnect/dodapp.jks')
+            storePassword 'sharingan123@ISMT'
+            keyAlias 'dodappkey'
+            keyPassword 'sharingan123@ISMT'
+        }
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            zipAlignEnabled true
+            signingConfig signingConfigs.release
         }
     }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
-
     apt 'com.jakewharton:butterknife-compiler:8.0.1'
-
     apt "com.google.dagger:dagger-compiler:2.0.1"
-    compile group: 'javax.annotation', name: 'jsr250-api', version: '1.0'
+    compile 'javax.annotation:jsr250-api:1.0'
     compile 'com.android.support:appcompat-v7:24.2.0'
     compile 'com.android.support:design:24.2.0'
     compile 'com.android.support:appcompat-v7:24.2.0'
     compile 'com.android.support:design:24.2.0'
     compile 'com.google.android.gms:play-services-auth:8.3.0'
+    compile "com.google.android.gms:play-services-gcm:8.3.0"
     compile 'com.jakewharton:butterknife:8.0.1'
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
@@ -41,4 +50,6 @@ dependencies {
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.google.dagger:dagger:2.0.1'
     compile 'com.android.support:support-v4:24.2.0'
+    compile 'com.amazonaws:aws-android-sdk-core:2.2.+'
+    compile 'com.amazonaws:aws-android-sdk-s3:2.2.+'
 }

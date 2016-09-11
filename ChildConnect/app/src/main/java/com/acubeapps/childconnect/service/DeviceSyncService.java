@@ -27,6 +27,7 @@ public class DeviceSyncService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        Log.d(Constants.LOG_TAG, "onHandleIntent for devicesyncservice");
         ComponentName uploadServiceComponent = new ComponentName(this, UploadSyncJobService.class);
         ComponentName policySyncComponent = new ComponentName(this, PolicySyncJobService.class);
         PersistableBundle extras = new PersistableBundle();
@@ -45,7 +46,6 @@ public class DeviceSyncService extends IntentService {
         JobInfo policyJobInfo = new JobInfo.Builder(getMaxPendingId() + 1, policySyncComponent)
                 .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
                 .setPersisted(true)
-                .setExtras(extras)
                 .build();
         jobScheduler.schedule(policyJobInfo);
         scheduleSelf();

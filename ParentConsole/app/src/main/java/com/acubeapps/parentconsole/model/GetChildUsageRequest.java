@@ -6,4 +6,9 @@ package com.acubeapps.parentconsole.model;
 public class GetChildUsageRequest {
     public String childId;
     public String uploadTime;
+
+    public GetChildUsageRequest(String childId, String uploadTime) {
+        this.childId = childId;
+        this.uploadTime = uploadTime;
+    }
 }

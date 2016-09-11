@@ -128,7 +128,7 @@ public class McqFragment extends Fragment implements View.OnClickListener{
             public void onFinish() {
                 progressBar.setProgress(10);
                 progressBar.setProgressDrawable(getResources().getDrawable(R.drawable.progess_bar_complete));
-                postFailure();
+                postFailure("-1");
             }
         };
         countDownTimer.start();
@@ -167,63 +167,63 @@ public class McqFragment extends Fragment implements View.OnClickListener{
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.btn_option_1:
-                if(questionDetails.solution == 1){
+                if(questionDetails.solution.equals("1")){
                     btnOption1.setBackgroundResource(R.drawable.rounded_corner_green);
-                    postSuccess();
+                    postSuccess("1");
                 } else {
                     btnOption1.setBackgroundResource(R.drawable.rounded_corner_red);
-                    postFailure();
+                    postFailure("1");
                 }
                 break;
             case R.id.btn_option_2:
-                if(questionDetails.solution == 2){
+                if(questionDetails.solution.equals("2")){
                     btnOption2.setBackgroundResource(R.drawable.rounded_corner_green);
-                    postSuccess();
+                    postSuccess("2");
                 } else {
                     btnOption2.setBackgroundResource(R.drawable.rounded_corner_red);
-                    postFailure();
+                    postFailure("2");
                 }
                 break;
             case R.id.btn_option_3:
-                if(questionDetails.solution == 3){
+                if(questionDetails.solution.equals("3")){
                     btnOption3.setBackgroundResource(R.drawable.rounded_corner_green);
-                    postSuccess();
+                    postSuccess("3");
                 } else {
                     btnOption3.setBackgroundResource(R.drawable.rounded_corner_red);
-                    postFailure();
+                    postFailure("3");
                 }
                 break;
             case R.id.btn_option_4:
-                if(questionDetails.solution == 4){
+                if(questionDetails.solution.equals("4")){
                     btnOption4.setBackgroundResource(R.drawable.rounded_corner_green);
-                    postSuccess();
+                    postSuccess("4");
                 } else {
                     btnOption4.setBackgroundResource(R.drawable.rounded_corner_red);
-                    postFailure();
+                    postFailure("4");
                 }
                 break;
         }
     }
 
     public interface OnMcqFragmentInteractionListener {
-        void onSuccessfulAttempt();
-        void onFailedAttempt();
+        void onSuccessfulAttempt(String optionSelected);
+        void onFailedAttempt(String optionSelected);
     }
 
-    private void postSuccess(){
+    private void postSuccess(final String optionId){
         MAIN_HANDLER.postDelayed(new Runnable() {
             @Override
             public void run() {
-                mListener.onSuccessfulAttempt();
+                mListener.onSuccessfulAttempt(optionId);
             }
         }, 500);
     }
 
-    private void postFailure(){
+    private void postFailure(final String optionId){
         MAIN_HANDLER.postDelayed(new Runnable() {
             @Override
             public void run() {
-                mListener.onFailedAttempt();
+                mListener.onFailedAttempt(optionId);
             }
         }, 500);
     }

@@ -1,5 +1,7 @@
 package com.acubeapps.parentconsole.network;
 
+import com.acubeapps.parentconsole.model.BaseResponse;
+import com.acubeapps.parentconsole.model.GcmRegisterRequest;
 import com.acubeapps.parentconsole.model.GetAllCoursesRequest;
 import com.acubeapps.parentconsole.model.GetAllCoursesResponse;
 import com.acubeapps.parentconsole.model.GetChildListRequest;
@@ -10,8 +12,11 @@ import com.acubeapps.parentconsole.model.GetCourseDetailsRequest;
 import com.acubeapps.parentconsole.model.GetCourseDetailsResponse;
 import com.acubeapps.parentconsole.model.GetSolutionRequest;
 import com.acubeapps.parentconsole.model.GetSolutionResponse;
+import com.acubeapps.parentconsole.model.GetUsageConfigRequest;
+import com.acubeapps.parentconsole.model.GetUsageConfigResponse;
 import com.acubeapps.parentconsole.model.ParentRegisterRequest;
 import com.acubeapps.parentconsole.model.ParentRegisterResponse;
+import com.acubeapps.parentconsole.model.SetUsageConfigRequest;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -31,10 +36,10 @@ public interface ApiInterface {
     Call<GetChildUsageResponse> getChildUsageList(@Body GetChildUsageRequest req);
 
     @POST("ChildConnectServer/download/childPolicy")
-    Call<GetChildListResponse> getChildUsagePolicy(@Body GetChildListRequest req);
+    Call<GetUsageConfigResponse> getChildUsagePolicy(@Body GetUsageConfigRequest req);
 
-    @POST("ChildConnectServer/download/childList")
-    Call<GetChildListResponse> getChildList(@Body GetChildListRequest req);
+    @POST("ChildConnectServer/upload/childPolicy")
+    Call<BaseResponse> setChildUsagePolicy(@Body SetUsageConfigRequest req);
 
     @POST("ChildConnectServer/getAllCourses")
     Call<GetAllCoursesResponse> getAllCourses(@Body GetAllCoursesRequest req);
@@ -44,4 +49,7 @@ public interface ApiInterface {
 
     @POST("ChildConnectServer/getSolution")
     Call<GetSolutionResponse> getSolution(@Body GetSolutionRequest req);
+
+    @POST("ChildConnectServer/login/parentGcm")
+    Call<BaseResponse> submitGcmToken(@Body GcmRegisterRequest req);
 }
