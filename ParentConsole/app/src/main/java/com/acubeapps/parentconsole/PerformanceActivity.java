@@ -38,6 +38,9 @@ public class PerformanceActivity extends AppCompatActivity {
     @BindView(R.id.txtSoln2)
     ImageView imgSoln2;
 
+    @BindView(R.id.txt_percentile)
+    TextView txtPerc;
+
     @Inject
     SharedPreferences sharedPreferences;
 
@@ -50,6 +53,7 @@ public class PerformanceActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         result = (ChildCourseResult) getIntent().getSerializableExtra(Constants.CHILD_RESULT);
         childName = sharedPreferences.getString(result.childId, null);
+        setTitle(childName + "'s Performance");
         bindData();
     }
 
@@ -73,12 +77,14 @@ public class PerformanceActivity extends AppCompatActivity {
     private void bindData(){
         List<QuestionDetails> questionDetailsList = result.questionList;
         QuestionDetails q1 = questionDetailsList.get(0);
-        txtQ1.setText(q1.questionText);
-        txtSoln1.setText("Your kid answered " + q1.options.get(Integer.valueOf(q1.getSolution())).getOptionText());
+        txtQ1.setText(q1.questionText + " ?");
+        txtSoln1.setText("Your kid answered " + q1.options.get(Integer.valueOf(q1.getSolution()) - 1).getOptionText());
 
         QuestionDetails q2 = questionDetailsList.get(1);
         txtQ2.setText(q2.questionText);
 
         Picasso.with(this).load(q2.getSolution()).into(target);
+
+        txtPerc.setText(childName + " scored: " + result.percentile + " percentile.");
     }
 }
