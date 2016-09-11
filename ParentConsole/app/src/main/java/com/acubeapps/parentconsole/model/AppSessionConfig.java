@@ -8,7 +8,6 @@ public class AppSessionConfig {
     private long sessionEndTime;
     private long sessionAllowedDuration;
     private AppStatus status;
-    private String taskId;
 
     public AppSessionConfig(long sessionStartTime, long sessionEndTime, long sessionAllowedDuration,
                             AppStatus status, String taskId) {
@@ -16,11 +15,6 @@ public class AppSessionConfig {
         this.sessionEndTime = sessionEndTime;
         this.sessionAllowedDuration = sessionAllowedDuration;
         this.status = status;
-        this.taskId = taskId;
-    }
-
-    public String getTaskId() {
-        return taskId;
     }
 
     public long getSessionStartTime() {
@@ -46,7 +40,6 @@ public class AppSessionConfig {
                 ", sessionEndTime=" + sessionEndTime +
                 ", sessionAllowedDuration=" + sessionAllowedDuration +
                 ", status=" + status +
-                ", taskId='" + taskId + '\'' +
                 '}';
     }
 }

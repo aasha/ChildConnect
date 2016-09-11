@@ -102,8 +102,8 @@ public class NetworkInterface {
         });
     }
 
-    public void getChildUsagePolicy(String parentId, final NetworkResponse<GetUsageConfigResponse> networkResponse) {
-        GetUsageConfigRequest getChildUsagePolicyRequest = new GetUsageConfigRequest(parentId);
+    public void getChildUsagePolicy(String childId, final NetworkResponse<GetUsageConfigResponse> networkResponse) {
+        GetUsageConfigRequest getChildUsagePolicyRequest = new GetUsageConfigRequest(childId);
         Call<GetUsageConfigResponse> call = networkInterface.getChildUsagePolicy(getChildUsagePolicyRequest);
         call.enqueue(new Callback<GetUsageConfigResponse>() {
             @Override

@@ -33,7 +33,6 @@ import retrofit2.Response;
 public class UpdatePolicyActivity extends AppCompatActivity implements View.OnClickListener{
 
     ChildDetails childDetails;
-    String parentId;
 
     @BindView(R.id.spinner_appname)
     Spinner spinnerAppName;
@@ -62,19 +61,15 @@ public class UpdatePolicyActivity extends AppCompatActivity implements View.OnCl
     @Inject
     NetworkInterface networkInterface;
 
-    @Inject
-    SharedPreferences sharedPreferences;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_policy);
         Injectors.appComponent().injectUpdatePolicyActivity(this);
         childDetails = getIntent().getParcelableExtra(Constants.CHILD_DETAILS);
-        parentId = sharedPreferences.getString(Constants.PARENT_ID, null);
         setTitle(childDetails.name);
         ButterKnife.bind(this);
-        networkInterface.getChildUsagePolicy(parentId, new NetworkResponse<GetUsageConfigResponse>() {
+        networkInterface.getChildUsagePolicy(childDetails.childId, new NetworkResponse<GetUsageConfigResponse>() {
             @Override
             public void success(GetUsageConfigResponse getUsageConfigResponse, Response response) {
                 Policy policy = getUsageConfigResponse.policy;
@@ -95,21 +90,21 @@ public class UpdatePolicyActivity extends AppCompatActivity implements View.OnCl
 
     }
 
-    private void bindData(Policy policy){
+    private void bindData(final Policy policy){
         final List<AppConfig> appConfigList = policy.appConfigList;
-        List<String> packageNameList = new ArrayList<>();
+        List<String> appNameList = new ArrayList<>();
         for (int index = 0; index < appConfigList.size(); index++) {
-            packageNameList.add(appConfigList.get(index).getAppName());
+            appNameList.add(appConfigList.get(index).getDisplayName());
         }
-        ArrayAdapter<String> spinnerAppAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, packageNameList);
+        ArrayAdapter<String> spinnerAppAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, appNameList);
         spinnerAppName.setAdapter(spinnerAppAdapter);
-        updateAllFields(appConfigList.get(0));
+        updateAllFields(policy.courseId, appConfigList.get(0));
         spinnerAppName.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 try {
                     AppConfig appConfig = appConfigList.get(position);
-                    updateAllFields(appConfig);
+                    updateAllFields(policy.courseId, appConfig);
                 } catch (Exception e){
                     e.printStackTrace();
                 }
@@ -122,16 +117,16 @@ public class UpdatePolicyActivity extends AppCompatActivity implements View.OnCl
         });
     }
 
-    private void updateAllFields(AppConfig appConfig) {
-        txtAppName.setText(appConfig.getAppName());
+    private void updateAllFields(String courseId, AppConfig appConfig) {
+        txtAppName.setText(appConfig.getDisplayName());
         AppSessionConfig appSessionConfig = appConfig.getAppSessionConfigList().get(0);
-        int minutes = (int) (appSessionConfig.getSessionStartTime()%60000);
-        int hours = (int) (appSessionConfig.getSessionStartTime()/60000);
+        int minutes = (int) (appSessionConfig.getSessionStartTime() % 3600000);
+        int hours = (int) (appSessionConfig.getSessionStartTime() / 3600000);
         txtStartTime.setText(hours + ":" + minutes);
-        minutes = (int) (appSessionConfig.getSessionEndTime()%60000);
-        hours = (int) (appSessionConfig.getSessionEndTime()/60000);
-        txtStartTime.setText(hours + ":" + minutes);
-        txtDuration.setText("" + appSessionConfig.getSessionAllowedDuration()/10000);
+        minutes = (int) (appSessionConfig.getSessionEndTime() % 3600000);
+        hours = (int) (appSessionConfig.getSessionEndTime() / 3600000);
+        txtEndTime.setText(hours + ":" + minutes);
+        txtDuration.setText("" + appSessionConfig.getSessionAllowedDuration()/60000);
         List<AppStatus> appStatusList = new ArrayList<>();
         appStatusList.add(AppStatus.ALLOWED);
         appStatusList.add(AppStatus.BLOCKED);
@@ -141,13 +136,12 @@ public class UpdatePolicyActivity extends AppCompatActivity implements View.OnCl
 
         List<String> taskList = new ArrayList<>();
         taskList.add("NONE");
-        String taskId = appSessionConfig.getTaskId();
-        if (taskId != null) {
-            taskList.add(taskId);
+        if (courseId != null) {
+            taskList.add(courseId);
         }
         ArrayAdapter<String> spinnerTaskAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, taskList);
         spinnerTask.setAdapter(spinnerTaskAdapter);
-        if (taskId != null) {
+        if (courseId != null) {
             spinnerTask.setSelection(1);
         } else {
             spinnerTask.setSelection(0);

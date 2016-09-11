@@ -7,15 +7,21 @@ import java.util.List;
  */
 public class AppConfig {
     private String appName;
+    private String displayName;
     private List<AppSessionConfig> appSessionConfigList;
 
-    public AppConfig(String appName, List<AppSessionConfig> appSessionConfigList) {
+    public AppConfig(String appName, String displayName, List<AppSessionConfig> appSessionConfigList) {
         this.appName = appName;
+        this.displayName = displayName;
         this.appSessionConfigList = appSessionConfigList;
     }
 
     public String getAppName() {
         return appName;
+    }
+
+    public String getDisplayName() {
+        return displayName;
     }
 
     public List<AppSessionConfig> getAppSessionConfigList() {
