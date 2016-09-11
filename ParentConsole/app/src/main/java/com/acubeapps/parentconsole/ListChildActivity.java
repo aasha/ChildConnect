@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.TextView;
 
 import com.acubeapps.parentconsole.adapters.ChildListAdapter;
 import com.acubeapps.parentconsole.model.GetChildListResponse;
@@ -29,6 +30,9 @@ public class ListChildActivity extends AppCompatActivity {
     @BindView(R.id.recycler_view_child_list)
     RecyclerView childRecyclerView;
 
+    @BindView(R.id.txt_parentId)
+    TextView txtParentId;
+
     ChildListAdapter childListAdapter;
 
     @Override
@@ -39,6 +43,7 @@ public class ListChildActivity extends AppCompatActivity {
         Injectors.appComponent().injectListChildActivity(this);
         ButterKnife.bind(this);
         String parentId = sharedPreferences.getString(Constants.PARENT_ID, null);
+        txtParentId.setText("Your id is : "+ parentId);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         childRecyclerView.setLayoutManager(mLayoutManager);
         childRecyclerView.setItemAnimator(new DefaultItemAnimator());

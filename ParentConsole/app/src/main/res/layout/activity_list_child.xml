@@ -8,7 +8,17 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.acubeapps.parentconsole.ListChildActivity">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/txt_parentId"
+        android:textSize="20sp"
+        android:textColor="@color/baseColor"
+        android:layout_marginBottom="40dp"/>
+
     <android.support.v7.widget.RecyclerView
+        android:layout_below="@+id/txt_parentId"
         android:id="@+id/recycler_view_child_list"
         android:scrollbars="vertical"
         android:layout_width="match_parent"
