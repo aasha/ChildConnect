@@ -14,6 +14,9 @@ import com.acubeapps.parentconsole.model.GetChildListResponse;
 import com.acubeapps.parentconsole.model.GetChildUsageResponse;
 import com.acubeapps.parentconsole.network.NetworkInterface;
 import com.acubeapps.parentconsole.network.NetworkResponse;
+import com.acubeapps.parentconsole.utils.CommonUtils;
+
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -43,11 +46,15 @@ public class AppUsageActivity extends AppCompatActivity {
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         appUsageRecyclerView.setLayoutManager(mLayoutManager);
         appUsageRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        networkInterface.getChildUsageList(childDetails.childId,"", new NetworkResponse<GetChildUsageResponse>() {
+        networkInterface.getChildUsageList(childDetails.childId, CommonUtils.getStartOfTheDayTime() - TimeUnit.HOURS.toMillis(24)+"", new NetworkResponse<GetChildUsageResponse>() {
             @Override
             public void success(GetChildUsageResponse getChildListResponse, Response response) {
-                appUsageListAdapter = new AppUsageListAdapter(getChildListResponse.appConfigList, AppUsageActivity.this);
-                appUsageRecyclerView.setAdapter(appUsageListAdapter);
+                try {
+                    appUsageListAdapter = new AppUsageListAdapter(getChildListResponse.appUsage, AppUsageActivity.this);
+                    appUsageRecyclerView.setAdapter(appUsageListAdapter);
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
             }
 
             @Override

@@ -6,7 +6,7 @@ import java.util.List;
  * Created by aasha.medhi on 9/11/16.
  */
 public class GetChildUsageResponse extends BaseResponse{
-    public List<AppUsage> appConfigList;
+    public List<AppUsage> appUsage;
     public List<String> browserHistory;
 
 }
