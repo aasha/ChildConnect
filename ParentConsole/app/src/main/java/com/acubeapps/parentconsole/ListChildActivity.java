@@ -35,6 +35,7 @@ public class ListChildActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_child);
+        setTitle("Your Kids");
         Injectors.appComponent().injectListChildActivity(this);
         ButterKnife.bind(this);
         String parentId = sharedPreferences.getString(Constants.PARENT_ID, null);

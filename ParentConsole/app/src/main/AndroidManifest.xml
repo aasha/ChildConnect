@@ -24,7 +24,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ChildListActivity" />
         <activity android:name=".ChildDetailsActivity" />
         <activity android:name=".AppUsageActivity" />
         <activity android:name=".BrowserHistoryActivity" />

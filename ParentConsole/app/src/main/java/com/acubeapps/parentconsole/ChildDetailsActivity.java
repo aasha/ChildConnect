@@ -31,12 +31,11 @@ public class ChildDetailsActivity extends AppCompatActivity implements View.OnCl
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //requestWindowFeature(Window.FEATURE_ACTION_BAR);
         setContentView(R.layout.activity_child_details);
         Injectors.appComponent().injectChildDetailsActivity(this);
         ButterKnife.bind(this);
         childDetails = getIntent().getParcelableExtra(Constants.CHILD_DETAILS);
-        //getActionBar().setTitle(childDetails.appName);
+        setTitle(childDetails.name);
         btnAppUsage.setOnClickListener(this);
         btnBrowserHistory.setOnClickListener(this);
         btnUpdatePolicy.setOnClickListener(this);

@@ -43,6 +43,7 @@ public class AppUsageActivity extends AppCompatActivity {
         Injectors.appComponent().injectAppUsageActivity(this);
         ButterKnife.bind(this);
         childDetails = getIntent().getParcelableExtra(Constants.CHILD_DETAILS);
+        setTitle(childDetails.name);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         appUsageRecyclerView.setLayoutManager(mLayoutManager);
         appUsageRecyclerView.setItemAnimator(new DefaultItemAnimator());

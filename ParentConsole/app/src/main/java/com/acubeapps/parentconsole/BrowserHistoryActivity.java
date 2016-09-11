@@ -41,6 +41,7 @@ public class BrowserHistoryActivity extends AppCompatActivity {
         Injectors.appComponent().injectBrowserHistoryActivity(this);
         ButterKnife.bind(this);
         childDetails = getIntent().getParcelableExtra(Constants.CHILD_DETAILS);
+        setTitle(childDetails.name);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         appUsageRecyclerView.setLayoutManager(mLayoutManager);
         appUsageRecyclerView.setItemAnimator(new DefaultItemAnimator());
