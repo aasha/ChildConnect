@@ -96,11 +96,13 @@ public class CourseService {
             details.setPercentile("85");
             childCourseDao.save(details);
 
+            //System.out.println(details.getQuestionList().size());
             String parentId = childLoginDao.getByChildId(request.getChildId()).getParentUserId();
             JSONObject msg = new JSONObject();
             msg.put("action", "courseCompleted");
-            msg.put("course", new JSONObject(details));
+            msg.put("course", new Gson().toJson(details));
             String API_KEY = "AIzaSyCtfaAGP-kisxwJQiEuIPvxYnICa24fbQo";
+            System.out.println(msg);
             //GcmNotificationSender.sendGcm(parentLoginDao.getByParentId(parentId).getGcmToken(), new Gson()., API_KEY);
             GcmNotificationSender.sendGcm(parentLoginDao.getByParentId(parentId).getGcmToken(), msg, API_KEY);
             response.setStatus("success");

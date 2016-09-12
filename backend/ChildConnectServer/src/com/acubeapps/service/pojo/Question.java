@@ -1,12 +1,13 @@
 package com.acubeapps.service.pojo;
 
+import java.io.Serializable;
 import java.util.List;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;
 
 @DynamoDBDocument
-public class Question {
-    private String questionId;
+public class Question implements Serializable {
+	private String questionId;
     private String questionType;
     private String questionText;
     private String solution;
